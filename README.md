@@ -10,9 +10,9 @@ Anyone with a windows OS 10 or 11
 
 
 ## ToDo
-- [] Create install files for MacOS
-- [] Finish the Windows install files
-- [] Get the scripts hosted in a webServer
+- [ ] Create install files for MacOS
+- [ ] Finish the Windows install files
+- [ ] Get the scripts hosted in a webServer
 
 
 ## Disclaimer
@@ -22,9 +22,10 @@ If I miss anybody on the Special Thanks, please let me know.
 
 ## Special thanks
 
-For all those that shared their dotfiles and all their knowledge already to make this happen.
+For all those that shared already their knowledge, their time and their dotfiles (and other kind of files of course) to make this happen.
 
-[mischavandenburg](https://github.com/mischavandenburg/dotfiles)
-[ryanlmcintyre](https://github.com/ryanoasis/nerd-fonts)
-[vatsan-madhavan](https://github.com/vatsan-madhavan/NerdFontInstaller)
-[benmatselby](https://github.com/benmatselby/dotfiles/blob/main/install.sh)
+- [mischavandenburg](https://github.com/mischavandenburg/dotfiles) (dotfiles / workflow)
+- [ryanlmcintyre](https://github.com/ryanoasis/nerd-fonts) (nerdfonts)
+- [vatsan-madhavan](https://github.com/vatsan-madhavan/NerdFontInstaller) (nerdfonts installer for win)
+- [benmatselby](https://github.com/benmatselby/dotfiles/blob/main/install.sh) (dotfiles)
+- [getnf](https://github.com/getnf/getnf) (nerdfonts made easy for *nix systems)

@@ -11,7 +11,6 @@ $msivtUrl = "https://wslstorestorage.blob.core.windows.net/wslblob/$wsl2Installe
 
 #endregion Global Variables
 
-# (($wslVersion.Split([Environment]::NewLine)[0]).Split(' ').Count)
 
 #region Functions
 function New-InstallDir {
