@@ -44,7 +44,7 @@ if ($cmd.StatusCode -ne 200) {
     "Something went south"
     "This window will close in 15 seconds"
     Start-Sleep -Seconds 15
-    exit
+    return
 } elseif ($cmd.StatusCode -eq 200) {
     Invoke-Expression $($cmd.Content)
     "Script ran successfully.`n"
