@@ -8,58 +8,94 @@ if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
 }
 
 #region functions
+
 function Install-FromRepo {
     param (
-        [Parameter(Mandatory)]
-        [string]$repoUrl
+        [Parameter(Mandatory = $false)]
+        [string]$githubRawUrl = "https://raw.githubusercontent.com/devadalberto/dotfiles/main/install/windows/nerdfonts/Install-Nerdfonts.ps1"
     )
+
     try {
-        $scriptInstallerCmd = Invoke-WebRequest $repoUrl
+        $scriptInstallerCmd = Invoke-WebRequest $githubRawUrl
     }
     catch {
         $Error[0]
+        "This window will close in 15 seconds"
+        Start-Sleep -Seconds 15
+        exit
     }
+
     if ($scriptInstallerCmd.StatusCode -eq 200) {
         Invoke-Expression $($scriptInstallerCmd.Content)
+        "Script ran successfully.`n"
+        "Make sure to close all your powershell sessions."
+        "This window will close in 5 seconds"
+        Start-Sleep -Seconds 5
+        return
     }
     else {
-        $repoInstaller = "https://github.com/devadalberto/dotfiles"
-        "Woooot... navigate to:`n$repoInstaller`n and check everything is ok"
+        "Something went south"
+        "This window will close in 15 seconds"
+        Start-Sleep -Seconds 15
+        exit
     }
+    
 }
+
+
+function Show-Menu {
+    param (
+        [string]$Title = "Install-FromRepo"
+    )
+    Clear-Host
+    Write-Host “================ $Title ================”
+    
+    Write-Host “1:nerdonts - Press '1' to install nerdonts.”
+    Write-Host “2:wsl      - Press '2' to install wsl2.”
+    Write-Host “3:wsl & nf - Press '3' to install wsl and nerdfonts.”
+    Write-Host “Q:         - Press 'Q' to quit.”
+}
+
 #endregion functions
 
 #region Script Exec
+
 if ( 5 -eq $PSVersionTable.PSVersion.Major) {
-    "Installing WSL and Nerdfonts"
-    $wslSetupUrl = "https://raw.githubusercontent.com/devadalberto/dotfiles/main/install/windows/wsl/Install-Wsl2.ps1"
-    $nfSetupUrl = "https://raw.githubusercontent.com/devadalberto/dotfiles/main/install/windows/nerdfonts/Install-Nerdfonts.ps1"
+    do {
+    
+        Show-Menu
+        $opt = Read-Host "Make a selection and WAIT... patiently"
 
-    $dirName = "wslsetup"
-    $outputPath = $env:TEMP + '\' + $dirName
-    New-Item -ItemType Directory -Path $outputPath
-    Set-Location $outputPath
+        switch ($opt.ToLower()) {
+            "1" { 
+                $nerdfontsUrl = "https://raw.githubusercontent.com/devadalberto/dotfiles/main/install/windows/nerdfonts/Install-Nerdfonts.ps1"
+                Install-FromRepo -githubRawUrl $nerdfontsUrl
+            }
+            "2" {
+            
+                $wsl2SetupUrl = "https://raw.githubusercontent.com/devadalberto/dotfiles/main/install/windows/wsl/Install-Wsl2.ps1"
+                Install-FromRepo -githubRawUrl $wsl2SetupUrl
+            }
+            "3" {
 
-    "Starting ..."
-    "Installing Windows Subsystem for Linux (wsl2)"
-    Start-Sleep -Seconds 2
-
-    Install-FromRepo -repoUrl $wslSetupUrl
-
-    "Installing Nerdfont UbuntuMono"
-    Start-Sleep -Seconds 2
-
-    Install-FromRepo -repoUrl $nfSetupUrl
-
-    # some cleanup
-    Set-Location $env:TEMP
-    Remove-Item -Path $outputPath -Recurse -Confirm $false -Force
+                $newWinSetupUrl = "https://raw.githubusercontent.com/devadalberto/dotfiles/main/install/windows/Setup-Windows.ps1"
+                Install-FromRepo -githubRawUrl $newWinSetupUrl
+            }
+            "q" {
+                return
+            }
+        }
+        pause
+    } until (
+        $opt -eq 'q'
+    )
 }
 else {
     "Currently the supported versions of this installer are for powershell 5`n"
     "Launch powershell using the following instructions and try again:`n`n"
-    "Press the Windows key + R on your keyboard. This will open the Run dialog box.`n"
-    "Type 'PowerShell' and press Enter.`n`n"
+    "Press the Windows key (or the search  bar). and type powershell.`n"
+    "Right click the icon that says only the word Powershell | run as Administrator.`n`n"
+    "try again this script"
     Start-Sleep -Seconds 15
     "This window will close in 15 seconds"
     break

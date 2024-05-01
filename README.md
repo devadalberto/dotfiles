@@ -11,13 +11,9 @@ Anyone with a windows OS 10 or 11
 
 ## tl;dr => I want to run this right now
 
-1. Press **"Windows-key + R"** on your keyboard.
+1. Run powershell as administrator (do NOT use 'Powershell 7')
 
-2. This will open the Run dialog box.
-
-3. Type 'PowerShell' and press Enter.
-
-4. Run below script.
+2. Run below scripts (one at a time)
 
 ```powershell
 # Checking permissions and setting execution policy and repository for Powershell
@@ -30,10 +26,11 @@ Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
 Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.208 -Force
 ```
 ```powershell
-$winSetupUrl = "https://raw.githubusercontent.com/devadalberto/dotfiles/main/install/windows/Setup-Windows.ps1"
+$url = "https://raw.githubusercontent.com/devadalberto/dotfiles/main/install/windows/Setup-Windows.ps1"
 
 try {
-    $scriptInstallerCmd = Invoke-WebRequest $winSetupUrl
+    $cmd = Invoke-WebRequest $url
+    return
 }
 catch {
     $Error[0]
@@ -41,8 +38,14 @@ catch {
     Start-Sleep -Seconds 15
     exit
 }
-if ($scriptInstallerCmd.StatusCode -eq 200) {
-    Invoke-Expression $($scriptInstallerCmd.Content)
+
+if ($cmd.StatusCode -eq 200) {
+    Invoke-Expression $($cmd.Content)
+    "Script ran successfully.`n"
+    "Make sure to close all your powershell sessions."
+    "This window will close in 5 seconds"
+    Start-Sleep -Seconds 5
+    return
 }
 else {
     "Something went south"

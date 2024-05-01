@@ -106,6 +106,9 @@ function Install-Winget {
 if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
     clear-host
     Write-Host "Please run this script as an administrator." -foregroundcolor red
+    "This window will close in 15 seconds"
+    Start-Sleep -Seconds 15
+    exit
 }
 else {
     # Check if winget is installed and up to date
@@ -124,9 +127,19 @@ else {
 
         if ($($wsls.Replace(" ", "").Split(":")[1]).Contains('2')) {
             [Int32]$wslInstalledVersion = 2
+
+            "wsl version: $wslInstalledVersion is installed :)"
+            "This window will close in 15 seconds"
+            Start-Sleep -Seconds 15
+            break
         }
         else {
             [Int32]$wslInstalledVersion = 1
+            "wsl version: $wslInstalledVersion is installed :)"
+            "Upgrading to wsl2"
+            "The process will continue in 10 seconds"
+            Start-Sleep -Seconds 10
+            return
         }
         
         
@@ -136,6 +149,7 @@ else {
 
             #now we download and install the WSL
             Install-MsiOrMsixBundle -installerName $wsl2InstallerName
+            break
         }
     }
     else {
@@ -145,14 +159,24 @@ else {
         # Check if reboot is required
         $rebootRequired = $?
         if ($rebootRequired) {
+            try {
+                Invoke-Expression $("wsl --set-default-version 2")
+            }
+            catch {
+                $error[0]
+            }
             Write-Host "WSL has been enabled. Please reboot your computer to apply the changes." -foregroundcolor Yellow
+            Start-Sleep -Seconds 10
             Restart-Computer
         }
         else {
             Write-Host "WSL has been enabled successfully." -foregroundcolor Green
+            "The window will close in 10 seconds"
+            Start-Sleep -Seconds 10
+            exit
         }
     }
 
     # Turn on WSL
-    Invoke-Expression $("wsl --set-default-version 2")
+    # Invoke-Expression $("wsl --set-default-version 2")
 }
