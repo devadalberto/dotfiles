@@ -17,17 +17,19 @@ Anyone with a windows OS 10 or 11
 
 3. Type 'PowerShell' and press Enter.
 
-4. Copy and paste below powershell script.
+4. Run below script.
 
 ```powershell
 # Checking permissions and setting execution policy and repository for Powershell
-
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force -Confirm:$false -Verbose
-
+```
+```powershell
 Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
-
+```
+```powershell
 Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.208 -Force
-
+```
+```powershell
 $winSetupUrl = "https://raw.githubusercontent.com/devadalberto/dotfiles/main/install/windows/Setup-Windows.ps1"
 
 try {
