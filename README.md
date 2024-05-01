@@ -39,19 +39,19 @@ catch {
     exit
 }
 
-if ($cmd.StatusCode -eq 200) {
+
+if ($cmd.StatusCode -ne 200) {
+    "Something went south"
+    "This window will close in 15 seconds"
+    Start-Sleep -Seconds 15
+    exit
+} elseif ($cmd.StatusCode -eq 200) {
     Invoke-Expression $($cmd.Content)
     "Script ran successfully.`n"
     "Make sure to close all your powershell sessions."
     "This window will close in 5 seconds"
     Start-Sleep -Seconds 5
-    return
-}
-else {
-    "Something went south"
-    "This window will close in 15 seconds"
-    Start-Sleep -Seconds 15
-    exit
+    break
 }
 ```
 

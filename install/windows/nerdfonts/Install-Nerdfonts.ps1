@@ -230,6 +230,6 @@ try {
 }
 finally {
     # Remove temp folder
-    Remove-Item -Force -Recurse $destinationPath | Out-Null
+    Remove-Item -Path $destinationPath -Force -Recurse  | Out-Null
     Write-Verbose "Removed $destinationPath"
 }
