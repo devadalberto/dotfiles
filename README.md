@@ -59,16 +59,15 @@ if ($cmd.StatusCode -ne 200) {
 ```
 
 ### I want to run this right now for Linux (Ubuntu 24.04 Server used to test)
-  1. Log into your machine and run
-  ```shell
-  sudo apt-get update -y
-  sudo apt-get install -y curl
-  ```
-  ```shell
-  
-  
-  ```
+1. Log into your machine and run
+```shell
+sudo apt-get update -y
+sudo apt-get install -y curl
+```
 
+```shell
+curl -o- https://raw.githubusercontent.com/devadalberto/dotfiles/main/install/linux/ubuntu-server.sh | bash
+```
 
 
 ## ToDo
