@@ -5,7 +5,7 @@ case $- in
 esac
 
 # proxy config
-PROXY_URL="170.2.99.192:3128/"
+PROXY_URL="http://170.2.99.192:3128/"
 export http_proxy="$PROXY_URL"
 export https_proxy="$PROXY_URL"
 export ftp_proxy="$PROXY_URL"
@@ -18,7 +18,7 @@ export NO_PROXY="127.0.0.1,localhost,192.168.1.1,:1,tbintra.net,corpintra.net,fr
 unset SSH_ASKPASS
 
 # Path to your oh-my-bash installation.
-export OSH='/home/saitama/.oh-my-bash'
+export OSH='/home/REPLACEUSERNAME/.oh-my-bash'
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-bash is loaded.
