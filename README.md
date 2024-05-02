@@ -4,12 +4,15 @@ Another attempt to automate the basic setup and configuration of a computer.
 
 The idea is to do it without using tools like ansible.
 
+Yes, I'm aware I'm not even close to be a developer so this might look wrong and contain errors, so feel free to send feedback!
 
 ## Who can use these?
-Anyone with a windows OS 10 or 11
+ - Anyone with a Windows 11 OS ( guessing it is compatible with Windows 10)
+ - Any Ubuntu (Debian based) OS - there are some caveats thou, only tested on Ubuntu so far
 
+## tl;dr
 
-## tl;dr => I want to run this right now
+### I want to run this right now for Windows
 
 1. Run powershell as administrator (do NOT use 'Powershell 7')
 
@@ -54,6 +57,18 @@ if ($cmd.StatusCode -ne 200) {
     break
 }
 ```
+
+### I want to run this right now for Linux (Ubuntu 24.04 Server used to test)
+  1. Log into your machine and run
+  ```shell
+  sudo apt-get update -y
+  sudo apt-get install -y curl
+  ```
+  ```shell
+  
+  
+  ```
+
 
 
 ## ToDo
