@@ -5,20 +5,22 @@ case $- in
 esac
 
 # proxy config
-PROXY_URL="http://1.2.3.4:4321/"
-export http_proxy="$PROXY_URL"
-export https_proxy="$PROXY_URL"
-export ftp_proxy="$PROXY_URL"
-export no_proxy="127.0.0.1,localhost,192.168.1.1,:1"
-#
-export HTTP_PROXY="$PROXY_URL"
-export HTTPS_PROXY="$PROXY_URL"
-export FTP_PROXY="$PROXY_URL"
-export NO_PROXY="127.0.0.1,localhost,192.168.1.1,:1"
+# PROXY_URL="http://1.2.3.4:4321/"
+# export http_proxy="$PROXY_URL"
+# export https_proxy="$PROXY_URL"
+# export ftp_proxy="$PROXY_URL"
+# export no_proxy="127.0.0.1,localhost,192.168.1.1,:1"
+# #
+# export HTTP_PROXY="$PROXY_URL"
+# export HTTPS_PROXY="$PROXY_URL"
+# export FTP_PROXY="$PROXY_URL"
+# export NO_PROXY="127.0.0.1,localhost,192.168.1.1,:1"
+
+# 
 unset SSH_ASKPASS
 
 # Path to your oh-my-bash installation.
-export OSH='/home/REPLACEUSERNAME/.oh-my-bash'
+export OSH="${HOME}/.oh-my-bash"
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-bash is loaded.
@@ -137,7 +139,6 @@ alias rmdjextras='rm -rf .git/ .mypy_cache/ .vscode/ local/ venv/'
 alias cat='bat -p --wrap=never --paging=never'
 alias batt='bat -p --paging=never'
 alias getip="grep -m 1 nameserver /etc/resolv.conf | awk '{print $2}'"
-alias cdpt9="cd /home/saitama/dev/repos/django/pt9"
 alias cfc="xclip -sel c < $1"
 alias cdaziac="cd /home/${USER}/dev/repos/terraform-az-iac"
 
@@ -168,7 +169,7 @@ function dock() {
 
 # Set up Poetry
 # export PATH="$HOME/.poetry/bin:$PATH"
-export PATH="/home/saitama/.local/bin:$PATH"
+export PATH="${HOME}/.local/bin:$PATH"
 
 # NVM
 export NVM_DIR="$HOME/.nvm"
@@ -192,7 +193,7 @@ eval "$(pyenv init -)"
 #######################################################
 ############ REMEMBER TO UPDATE THIS PATH ############
 #######################################################
-export KUBECONFIG="/mnt/c/Users/javalace/.kube/config"
+export KUBECONFIG="/mnt/c/Users/${USER}/.kube/config"
 
 ## kubelogin
 export KL_ROOT=/usr/local/bin/kubelogin
