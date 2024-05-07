@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 { # this ensures the entire script is downloaded #
+
+########
+# script variables / constants
+OSVER="$(lsb_release -rs)"
+DISTRO="$(lsb_release --id --short)"
+LDISTRO="$(echo ${DISTRO} | tr '[:upper:]' '[:lower:]')"
+########
 # apt update
 sudo apt-get update -y
 
@@ -23,8 +30,20 @@ sudo apt-get install -y gcc \
 	bison \
 	telnet
 
-# python3.11 for the OS
-sudo apt-get install python3.11 python3.11-full python3.11-dev python3.11-venv python3-poetry -y
+# python for the OS
+case $OSVER in
+  24.04)
+  sudo apt-get install python3.12 python3.12-full python3.12-dev python3.12-venv python3-poetry -y
+  ;;
+  22.04)
+  sudo apt-get install python3.11 python3.11-full python3.11-dev python3.11-venv python3-poetry -y
+  ;;
+  *)
+  echo "This script is not compatible with: ${LDISTRO} ${OSVER}"
+  ;;
+esac
+
+
 
 # some more tools and libs
 sudo apt install -y build-essential \
@@ -228,9 +247,6 @@ sudo make install
 
 ## dotnet installation
 cd ${HOME}/downloads
-OSVER="$(lsb_release -rs)"
-DISTRO="$(lsb_release --id --short)"
-LDISTRO="$(echo ${DISTRO} | tr '[:upper:]' '[:lower:]')"
 curl -LO https://packages.microsoft.com/config/${LDISTRO}/${OSVER}/packages-microsoft-prod.deb
 sudo dpkg -i packages-microsoft-prod.deb
 # rm packages-microsoft-prod.deb
