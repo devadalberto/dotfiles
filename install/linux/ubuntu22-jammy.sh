@@ -52,10 +52,10 @@ sudo apt install -y build-essential \
 
 
 # Nerdfonts
-curl -fsSL https://raw.githubusercontent.com/getnf/getnf/main/install.sh | bash
+curl -o- https://raw.githubusercontent.com/getnf/getnf/main/install.sh | bash
 
 # NVM - NodeJS Version Manager
-curl -sSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 
 # create directories
 export XDG_CONFIG_HOME=${HOME}/.config
@@ -100,7 +100,7 @@ git clone https://github.com/LazyVim/starter ~/.config/nvim
 rm -rf ~/.config/nvim/.git
 
 # pyenv
-curl https://pyenv.run | bash
+curl -o- https://pyenv.run | bash
 
 # oh my bash
 # rm -rf ${HOME}/.oh-my-bash/
