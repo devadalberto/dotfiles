@@ -52,10 +52,10 @@ sudo apt install -y build-essential \
 
 
 # Nerdfonts
-curl -fsSL https://raw.githubusercontent.com/getnf/getnf/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/getnf/getnf/main/install.sh | bash
 
 # NVM - NodeJS Version Manager
-curl -sSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | sh
+curl -sSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 
 # create directories
 export XDG_CONFIG_HOME=${HOME}/.config
@@ -100,7 +100,7 @@ git clone https://github.com/LazyVim/starter ~/.config/nvim
 rm -rf ~/.config/nvim/.git
 
 # pyenv
-curl https://pyenv.run | sh
+curl https://pyenv.run | bash
 
 # oh my bash
 # rm -rf ${HOME}/.oh-my-bash/
@@ -133,7 +133,7 @@ curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/config/f
 echo "================ Reloading RC file =================="
 
 # reload your bashrc
-echo "source ${HOME}/.bashrc" | sh
+echo "source ${HOME}/.bashrc" | bash
 
 echo "+ - * + - * + - * + - * + - * + - * + - * + - * + - * + - * + - * + - * + - * + - * + - * + - *"
 echo "TESTING - 3 mins to close... check the RC file"
@@ -209,7 +209,7 @@ sudo apt-get install -y aspnetcore-runtime-8.0
 
 
 
-curl -sS https://starship.rs/install.sh | sh
+curl -sS https://starship.rs/install.sh | bash
 
 mkdir -p ${HOME}/.config
 mv ${HOME}/.config/starship.toml ${HOME}/.config/starship.toml.bak
@@ -275,6 +275,6 @@ clear
 rm -rf ${HOME}/downloads/*
 
 # reload your bashrc
-echo "source ${HOME}/.bashrc" | sh
+echo "source ${HOME}/.bashrc" | bash
 
 } # this ensures the entire script is downloaded #
