@@ -17,8 +17,8 @@ sudo apt-get install -y gcc \
 	lsb-release \
 	telnet
 
-# python3.12 for the OS
-sudo apt-get install python3.12 python3.12-full python3.12-dev python3.12-venv -y
+# python3.11 for the OS
+sudo apt-get install python3.11 python3.11-full python3.11-dev python3.11-venv -y
 
 # some more tools and libs
 sudo apt install -y build-essential \
@@ -81,6 +81,9 @@ rm -rf ~/.config/nvim/.git
 # pyenv
 curl https://pyenv.run | bash
 
+# oh my bash
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
+
 # bashrc file
 mv ${HOME}/.bashrc{,.bak}
 touch ${HOME}/.bashrc
@@ -89,8 +92,11 @@ curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles
 # reload your bashrc
 source ~/.bashrc
 
+
 # lazygit - you need to have go installed
 cd ~/downloads
+source ~/.bashrc
+
 git clone https://github.com/jesseduffield/lazygit.git
 cd lazygit
 go install
@@ -145,11 +151,9 @@ sudo apt-get install -y dotnet-sdk-8.0
 sudo apt-get install -y aspnetcore-runtime-8.0
 
 
-## install starship
 
-```shell
 curl -sS https://starship.rs/install.sh | sh
-```
+
 mkdir -p ${HOME}/.config
 mv ${HOME}/.config/starship.toml{,.bak}
 touch ${HOME}/.config/starship.toml
