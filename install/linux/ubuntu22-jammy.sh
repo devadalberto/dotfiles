@@ -191,7 +191,7 @@ OSVER="$(lsb_release -rs)"
 LDISTRO="$(lsb_release --id --short)"
 curl -LO https://packages.microsoft.com/config/${LDISTRO}/${OSVER}/packages-microsoft-prod.deb
 sudo dpkg -i packages-microsoft-prod.deb
-rm packages-microsoft-prod.deb
+# rm packages-microsoft-prod.deb
 
 sudo apt-get update
 sudo apt-get install -y dotnet-sdk-7.0
@@ -263,5 +263,8 @@ clear
 # sudo usermod -aG docker $USER
 
 # # RU=$(basename $(eval echo "~$pwd"))
+
+# some housekeeping
+rm -rf ${HOME}/downloads/*
 
 } # this ensures the entire script is downloaded #
