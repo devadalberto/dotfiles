@@ -105,7 +105,7 @@ curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles
 curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/bash_profile > ${HOME}/.bash_profile
 curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/tmuxconf > ${HOME}/.tmux.conf
 curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/inputrc > ${HOME}/.inputrc
-curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/alacrity.toml > ${XDG_CONFIG_HOME}/alacrity.toml
+curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/alacritty.toml > ${XDG_CONFIG_HOME}/alacritty.toml
 curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/starship.toml > ${XDG_CONFIG_HOME}/starship.toml
 
 # Symbolic links
