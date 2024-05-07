@@ -40,7 +40,6 @@ sudo apt install -y build-essential \
 	neofetch \
 	rust-all \
 	unzip \
-	starship \
 	ripgrep \
 	cargo 
 
@@ -129,8 +128,8 @@ echo "================ WAKING UP ...======================"
 sleep 10s
 
 # create some folders
-mkdir -p ${SCRIPTS}
-mkdir -p ${DOTNET_ROOT}
+# mkdir -p ${SCRIPTS}
+# mkdir -p ${DOTNET_ROOT}
 
 # lazygit - you need to have go installed
 cd ~/downloads
@@ -138,6 +137,8 @@ cd ~/downloads
 git clone https://github.com/jesseduffield/lazygit.git
 cd lazygit
 go install
+
+
 
 # install Node
 nvm install --lts

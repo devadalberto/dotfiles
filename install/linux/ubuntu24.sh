@@ -42,6 +42,9 @@ curl -fsSL https://raw.githubusercontent.com/getnf/getnf/main/install.sh | bash
 # NVM - NodeJS Version Manager
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 
+# starship
+curl -sS https://starship.rs/install.sh | sh
+
 # go (golang)
 mkdir -p $HOME/downloads
 cd ${HOME}/downloads/
@@ -54,6 +57,17 @@ sudo tar -zxvf ${GO_INSTALLER} -C /usr/local/
 
 # reload your bashrc
 source ~/.bashrc
+
+sleep 2s
+
+. ~/.bashrc
+
+sleep 2s
+
+clear
+
+exec bash
+
 
 # install Node
 nvm install --lts
