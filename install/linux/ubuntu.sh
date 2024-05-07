@@ -91,6 +91,7 @@ mkdir -p ${XDG_CONFIG_HOME}/k9s
 git clone https://github.com/alacritty/alacritty-theme ${XDG_CONFIG_HOME}/alacritty/themes
 
 # go (golang)
+echo $sudoPW | sudo su -
 mkdir -p ${HOME}/downloads
 cd ${HOME}/downloads/
 GO_VER='1.22.2'
@@ -101,10 +102,11 @@ tar -zxvf ${GO_INSTALLER} -C /usr/local/
 
 
 # neovim
+echo $sudoPW | sudo su -
 mkdir -p ${HOME}/downloads/neovim && cd ${HOME}/downloads/neovim
 curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
-echo $sudoPW | sudo rm -rf /opt/nvim
-echo $sudoPW | sudo tar -C /opt -xzf nvim-linux64.tar.gz
+rm -rf /opt/nvim
+tar -C /opt -xzf nvim-linux64.tar.gz
 
 
 # lazyvim
@@ -151,15 +153,15 @@ curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/config/f
 # ln -sf "$PWD/skhdrc" "$XDG_CONFIG_HOME"/skhd/skhdrc
 
 # hashicorp / tf
+echo $sudoPW | sudo su -
 cd ${HOME}/downloads/
-curl -fsSL https://apt.releases.hashicorp.com/gpg | echo $sudoPW | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+curl -fsSL https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
 gpg --no-default-keyring --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg --fingerprint
 
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | echo $sudoPW | tee /etc/apt/sources.list.d/hashicorp.list
 
 ####################################################333
 # Kubernetes - k8s
-echo $sudoPW | sudo su -
 
 KSYMVER=$(curl -L -s https://dl.k8s.io/release/stable.txt) # v1.30.0
 KVER=$(echo ${KSYMVER} | cut -f1-2 -d\.)  # v1.30 -> for curl/web downloads
