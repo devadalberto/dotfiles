@@ -40,12 +40,8 @@ sudo apt install -y build-essential \
 	neofetch \
 	rust-all \
 	unzip \
-	fd \
-	fzf \
-	kubectl \
-	kubectx \
-	derailed/k9s/k9s \
 	starship \
+	ripgrep \
 	cargo 
 
 
@@ -65,8 +61,8 @@ mkdir -p "$XDG_CONFIG_HOME"/k9s
 git clone https://github.com/alacritty/alacritty-theme "$XDG_CONFIG_HOME"/alacritty/themes
 
 # go (golang)
-mkdir -p ${$HOME}/downloads
-cd ${HOME}/downloads/
+mkdir -p ~/downloads
+cd ~/downloads/
 GO_VER='1.22.2'
 GO_INSTALLER=go${GO_VER}.linux-amd64.tar.gz
 GO_FILE_URL=https://go.dev/dl/${GO_INSTALLER}
@@ -103,25 +99,24 @@ curl https://pyenv.run | bash
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
 
 # bashrc file
-mv ${HOME}/.bashrc{,.bak}
-mv ${HOME}/.bash_profile{,.bak}
-touch ${HOME}/.bashrc
-touch ${HOME}/.bash_profile
-curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/bashrc >> ${HOME}/.bashrc
-curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/bash_profile >> ${HOME}/.bash_profile
+mv ~/.bashrc{,.bak}
+mv ~/.bash_profile{,.bak}
+curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/bashrc > ${HOME}/.bashrc
+curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/bash_profile > ${HOME}/.bash_profile
+curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/tmuxconf > ${HOME}/.tmux.conf
+curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/inputrc > ${HOME}/.inputrc
 curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/alacrity.toml > ${XDG_CONFIG_HOME}/alacrity.toml
 curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/starship.toml > ${XDG_CONFIG_HOME}/starship.toml
 
 # Symbolic links
-cd ${XDG_CONFIG_HOME}/.config/
 # ln -s ./.amethyst.yml "$HOME"/.amethyst.yml
 # ln -sf "$PWD/alacritty.toml" "$XDG_CONFIG_HOME"/alacritty/alacritty.toml
-ln -sf "$PWD/k9s/skin.yml" "$XDG_CONFIG_HOME"/k9s/skin.yml
-ln -sf "$PWD/.bash_profile" "$HOME"/.bash_profile
-ln -sf "$PWD/.bashrc" "$HOME"/.bashrc
-ln -sf "$PWD/.inputrc" "$HOME"/.inputrc
-ln -sf "$PWD/.tmux.conf" "$HOME"/.tmux.conf
-ln -sf "$PWD/nvim" "$XDG_CONFIG_HOME"/nvim
+# ln -sf "$PWD/k9s/skin.yml" "$XDG_CONFIG_HOME"/k9s/skin.yml
+# ln -sf "$PWD/.bash_profile" "$HOME"/.bash_profile
+# ln -sf "$PWD/.bashrc" "$HOME"/.bashrc
+# ln -sf "$PWD/.inputrc" "$HOME"/.inputrc
+# ln -sf "$PWD/.tmux.conf" "$HOME"/.tmux.conf
+# ln -sf "$PWD/nvim" "$XDG_CONFIG_HOME"/nvim
 # ln -sf "$PWD/skhdrc" "$XDG_CONFIG_HOME"/skhd/skhdrc
 
 # reload your bashrc
@@ -129,6 +124,9 @@ bash -c "$(source ~/.bashrc)"
 
 echo "================ SLEEPING ================================="
 sleep 45s
+
+echo "================ WAKING UP ...======================"
+sleep 10s
 
 # create some folders
 mkdir -p ${SCRIPTS}
