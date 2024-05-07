@@ -129,11 +129,61 @@ curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/config/f
 # ln -sf "$PWD/nvim" "$XDG_CONFIG_HOME"/nvim
 # ln -sf "$PWD/skhdrc" "$XDG_CONFIG_HOME"/skhd/skhdrc
 
+# hashicorp / tf
+cd ${HOME}/downloads/
+curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+gpg --no-default-keyring --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg --fingerprint
+
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+
+####################################################333
+# Kubernetes - k8s
+KSYMVER=$(curl -L -s https://dl.k8s.io/release/stable.txt) # v1.30.0
+KVER=$(echo ${KSYMVER} | cut -f1-2 -d\.)  # v1.30 -> for curl/web downloads
+echo "installing for k8s SymVer: ${KSYMVER}"
+echo "installing for k8s MajorVer: ${KVER}"
+
+mkdir -p /usr/share/keyrings
+
+cd ${HOME}/downloads
+curl -fsSL https://pkgs.k8s.io/core:/stable:/${KVER}/deb/Release.key | sudo gpg --dearmor -o /usr/share/keyrings/kubernetes-apt-keyring.gpg
+# allow unprivileged APT programs to read this keyring
+sudo chmod 644 /usr/share/keyrings/kubernetes-apt-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/${KVER}/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+sudo apt-get update -y
+sudo apt-get install -y terraform kubectl
+
+# Install Kubelogin
+# sudo su -
+# mkdir -p root/downloads && cd root/downloads
+cd ${HOME}/downloads
+KLBASE=https://github.com/Azure/kubelogin/releases/download
+KLVERSION=v0.1.3
+KLFILE=kubelogin-linux-amd64.zip
+KUBELOGIN_URL=${KLBASE}/${KLVERSION}/${KLFILE}
+curl -LO ${KUBELOGIN_URL}
+unzip ${KLFILE}
+# accept whatever this throws
+rm -rf /usr/local/bin/kubelogin
+mv bin/linux_amd64/kubelogin /usr/local/bin/
+chmod +x /usr/local/bin/kubelogin
+
+# download and install tmux
+mkdir -p ${HOME}/downloads/tmux && cd ${HOME}/downloads/tmux
+git clone https://github.com/tmux/tmux.git
+cd tmux
+sh autogen.sh
+./configure && make
+sudo make install
+clear
+
 
 echo "================ Reloading RC file =================="
 
 # reload your bashrc
-echo "source ${HOME}/.bashrc" | bash
+# echo "source ${HOME}/.bashrc" | bash
+eval "$(cat ~/.bashrc | tail -n +10)"
 
 echo "+ - * + - * + - * + - * + - * + - * + - * + - * + - * + - * + - * + - * + - * + - * + - * + - *"
 sleep 15s
@@ -159,22 +209,15 @@ getnf -i UbuntuMono
 
 # pyenv install --list | grep 3.12
 # below install command takes a while, be patient
+echo ":::::::::::::::::::::::::::: below install command takes a while, be patient ::::::::::::::::::::::::::::"
 pyenv install 3.12.2
 # set the python version as global
 pyenv global 3.12.2
 
-# terraform
-cd ${HOME}/downloads
-curl -LO  https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
-echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
-
-sudo apt-get -y update
-sudo apt-get install terraform
-
 # tmux
 # libevent (pre-req)
 # sudo apt-get install -y autoconf automake pkg-config bash-completion bison
-sudo apt install -y ncurses-*
+# sudo apt install -y ncurses-*
 cd ${HOME}/downloads
 curl -LO https://github.com/libevent/libevent/releases/download/release-2.1.12-stable/libevent-2.1.12-stable.tar.gz
 sudo tar -C ${HOME}/downloads -xzf libevent-2.1.12-stable.tar.gz
@@ -200,38 +243,12 @@ sudo apt-get install -y aspnetcore-runtime-7.0
 sudo apt-get install -y dotnet-sdk-8.0
 sudo apt-get install -y aspnetcore-runtime-8.0
 
-
-
 curl -sS https://starship.rs/install.sh | bash
 
 mkdir -p ${HOME}/.config
 mv ${HOME}/.config/starship.toml ${HOME}/.config/starship.toml.bak
 touch ${HOME}/.config/starship.toml
 curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/starship.toml > ${HOME}/.config/starship.toml
-
-
-# sudo su -
-# mkdir -p root/downloads && cd root/downloads
-cd ${HOME}/downloads
-KLBASE=https://github.com/Azure/kubelogin/releases/download
-KLVERSION=v0.1.3
-KLFILE=kubelogin-linux-amd64.zip
-KUBELOGIN_URL=${KLBASE}/${KLVERSION}/${KLFILE}
-curl -LO ${KUBELOGIN_URL}
-unzip ${KLFILE}
-# accept whatever this throws
-rm -rf /usr/local/bin/kubelogin
-mv bin/linux_amd64/kubelogin /usr/local/bin/
-chmod +x /usr/local/bin/kubelogin
-
-# download and install tmux
-mkdir -p ${HOME}/downloads/tmux && cd ${HOME}/downloads/tmux
-git clone https://github.com/tmux/tmux.git
-cd tmux
-sh autogen.sh
-./configure && make
-sudo make install
-clear
 
 # # Not tested yet
 # # docker
@@ -267,7 +284,7 @@ clear
 # some housekeeping
 rm -rf ${HOME}/downloads/*
 
-# reload your bashrc
-echo "source ${HOME}/.bashrc" | bash
+# reload your bashrc one last time
+eval "$(cat ~/.bashrc | tail -n +10)"
 
 } # this ensures the entire script is downloaded #
