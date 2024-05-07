@@ -19,7 +19,6 @@ esac
 # export FTP_PROXY="$PROXY_URL"
 # export NO_PROXY="127.0.0.1,localhost,192.168.1.1,:1"
 
-# ----
 # oh-my-bash Path and config.
 export OSH="${HOME}/.oh-my-bash"
 

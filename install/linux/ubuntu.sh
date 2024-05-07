@@ -2,7 +2,9 @@
 { # this ensures the entire script is downloaded #
 ########
 # script variables / constants
-read -s -p "Enter Password for sudo: " sudoPW
+
+read -p "Enter Password for sudo: " sudoPW
+
 OSVER="$(lsb_release -rs)"
 DISTRO="$(lsb_release --id --short)"
 LDISTRO="$(echo ${DISTRO} | tr '[:upper:]' '[:lower:]')"
@@ -95,7 +97,7 @@ GO_VER='1.22.2'
 GO_INSTALLER=go${GO_VER}.linux-amd64.tar.gz
 GO_FILE_URL=https://go.dev/dl/${GO_INSTALLER}
 curl -sSL ${GO_FILE_URL} > ${GO_INSTALLER}
-echo $sudoPW | tar -zxvf ${GO_INSTALLER} -C /usr/local/
+tar -zxvf ${GO_INSTALLER} -C /usr/local/
 
 
 # neovim
@@ -157,6 +159,8 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashi
 
 ####################################################333
 # Kubernetes - k8s
+echo $sudoPW | sudo su -
+
 KSYMVER=$(curl -L -s https://dl.k8s.io/release/stable.txt) # v1.30.0
 KVER=$(echo ${KSYMVER} | cut -f1-2 -d\.)  # v1.30 -> for curl/web downloads
 echo "installing for k8s SymVer: ${KSYMVER}"
@@ -165,16 +169,15 @@ echo "installing for k8s MajorVer: ${KVER}"
 mkdir -p /usr/share/keyrings
 
 cd ${HOME}/downloads
-curl -fsSL https://pkgs.k8s.io/core:/stable:/${KVER}/deb/Release.key | echo $sudoPW | gpg --dearmor -o /usr/share/keyrings/kubernetes-apt-keyring.gpg
+curl -fsSL https://pkgs.k8s.io/core:/stable:/${KVER}/deb/Release.key | gpg --dearmor -o /usr/share/keyrings/kubernetes-apt-keyring.gpg
 # allow unprivileged APT programs to read this keyring
-echo $sudoPW | sudo chmod 644 /usr/share/keyrings/kubernetes-apt-keyring.gpg
+chmod 644 /usr/share/keyrings/kubernetes-apt-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/${KVER}/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
-echo $sudoPW | sudo apt-get update -y
-echo $sudoPW | sudo apt-get install -y terraform kubectl
+apt-get update -y
+apt-get install -y terraform kubectl
 
 # Install Kubelogin
-# sudo su -
 # mkdir -p root/downloads && cd root/downloads
 cd ${HOME}/downloads
 KLBASE=https://github.com/Azure/kubelogin/releases/download
@@ -184,9 +187,10 @@ KUBELOGIN_URL=${KLBASE}/${KLVERSION}/${KLFILE}
 curl -LO ${KUBELOGIN_URL}
 unzip ${KLFILE}
 # accept whatever this throws
-echo $sudoPW | sudo rm -rf /usr/local/bin/kubelogin
-echo $sudoPW | sudo mv bin/linux_amd64/kubelogin /usr/local/bin/
-echo $sudoPW | sudo chmod +x /usr/local/bin/kubelogin
+rm -rf /usr/local/bin/kubelogin
+mv bin/linux_amd64/kubelogin /usr/local/bin/
+chmod +x /usr/local/bin/kubelogin
+exit
 
 # download and install tmux
 mkdir -p ${HOME}/downloads/tmux && cd ${HOME}/downloads/tmux
@@ -194,7 +198,7 @@ git clone https://github.com/tmux/tmux.git
 cd tmux
 sh autogen.sh
 ./configure && make
-echo $sudoPW | sudo make install
+sudo make install
 clear
 
 
@@ -202,7 +206,7 @@ echo "================ Reloading RC file =================="
 
 # reload your bashrc
 # echo "source ${HOME}/.bashrc" | bash
-eval "$(cat ~/.bashrc | tail -n +10)"
+eval "$(cat ~/.bashrc | tail -n +10 )"
 sleep 5s
 
 # lazygit - you need to have go(lang) installed
