@@ -1,3 +1,6 @@
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
 # Enable the subsequent settings only in interactive sessions
 case $- in
 *i*) ;;
@@ -16,13 +19,11 @@ esac
 # export FTP_PROXY="$PROXY_URL"
 # export NO_PROXY="127.0.0.1,localhost,192.168.1.1,:1"
 
-# If not running interactively, don't do anything
-[[ $- != *i* ]] && return
 
 # Set to superior editing mode
 set -o vi
 
-eval "$(starship init bash)"
+
 # ==================== Environment Variables ====================
 
 export VISUAL=nvim
@@ -138,7 +139,6 @@ alias fp="fzf --preview 'bat --style=numbers --color=always --line-range :500 {}
 alias vf='v $(fp)'
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# Installer configuration
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 # NVM
@@ -210,9 +210,6 @@ export PATH=$HOME/local/bin:$PATH
 export LD_LIBRARY_PATH=$HOME/local/lib:$LD_LIBRARY_PATH
 export MANPATH=$HOME/local/share/man:$MANPATH
 
-# for rust cargo
-. "$HOME/.cargo/env"
-
 # Poetry path
 export PATH="${HOME}/.local/bin:$PATH"
 
@@ -224,7 +221,10 @@ export PATH="${HOME}/.local/bin:$PATH"
 
 # export KUBECONFIG="/mnt/c/Users/${USER}/.kube/config"
 
-## kubelogin
+# kubelogin
 export KL_ROOT=/usr/local/bin/kubelogin
 export KL_PATH=$HOME/kubelogin
 export PATH=$KL_PATH/bin:$KL_ROOT/bin:$PATH
+
+# starship
+eval "$(starship init bash)"

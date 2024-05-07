@@ -24,7 +24,7 @@ sudo apt-get install -y gcc \
 	telnet
 
 # python3.11 for the OS
-sudo apt-get install python3.11 python3.11-full python3.11-dev python3.11-venv -y
+sudo apt-get install python3.11 python3.11-full python3.11-dev python3.11-venv python3-poetry -y
 
 # some more tools and libs
 sudo apt install -y build-essential \
@@ -46,12 +46,12 @@ sudo apt install -y build-essential \
 	neofetch \
 	rust-all \
 	unzip \
-	ripgrep \
-	cargo 
+	ncurses-* \
+	ripgrep
 
 
 # Nerdfonts
-curl -fsSL https://raw.githubusercontent.com/getnf/getnf/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/getnf/getnf/main/install.sh | sh
 
 # create directories
 export XDG_CONFIG_HOME=${HOME}/.config
@@ -75,7 +75,7 @@ curl -sSL ${GO_FILE_URL} > ${GO_INSTALLER}
 sudo tar -zxvf ${GO_INSTALLER} -C /usr/local/
 
 # NVM - NodeJS Version Manager
-curl -sSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | sh
 
 # neovim
 mkdir -p ~/downloads/neovim && cd ~/downloads/neovim
@@ -98,7 +98,7 @@ git clone https://github.com/LazyVim/starter ~/.config/nvim
 rm -rf ~/.config/nvim/.git
 
 # pyenv
-curl https://pyenv.run | bash
+curl https://pyenv.run | sh
 
 # oh my bash
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
@@ -125,24 +125,22 @@ curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/config/f
 # ln -sf "$PWD/nvim" "$XDG_CONFIG_HOME"/nvim
 # ln -sf "$PWD/skhdrc" "$XDG_CONFIG_HOME"/skhd/skhdrc
 
-# reload your bashrc
-bash -c "$(source ~/.bashrc)"
 
-echo "================ SLEEPING ================================="
-sleep 15s
-
-source ${HOME}/.bashrc
-
-echo "================ WAKING UP ...======================"
+echo "================ Reloading RC file =================="
 sleep 10s
+
+# reload your bashrc
+echo "source ${HOME}/.bashrc" | sh
+
+echo "================ Continue ...======================"
+sleep 5s
 
 # create folders
 # mkdir -p ${SCRIPTS}
 # mkdir -p ${DOTNET_ROOT}
 
-# lazygit - you need to have go installed
+# lazygit - you need to have go(lang) installed
 cd ~/downloads
-
 git clone https://github.com/jesseduffield/lazygit.git
 cd lazygit
 go install
@@ -156,6 +154,7 @@ nvm install-latest-npm
 
 echo "================ finished node installer ...======================"
 sleep 10s
+
 # install nerdfonts
 getnf -i UbuntuMono
 
@@ -175,7 +174,7 @@ sudo apt-get install terraform
 
 # tmux
 # libevent (pre-req)
-sudo apt-get install -y autoconf automake pkg-config bash-completion bison
+# sudo apt-get install -y autoconf automake pkg-config bash-completion bison
 sudo apt install -y ncurses-*
 cd ~/downloads
 curl -LO https://github.com/libevent/libevent/releases/download/release-2.1.12-stable/libevent-2.1.12-stable.tar.gz
@@ -187,6 +186,7 @@ make verify   # (optional)
 sudo make install
 
 ## dotnet installation
+cd ${HOME}/downloads
 OSVER="$(lsb_release -rs)"
 LDISTRO="$(lsb_release --id --short)"
 curl -LO https://packages.microsoft.com/config/${LDISTRO}/${OSVER}/packages-microsoft-prod.deb
@@ -211,15 +211,16 @@ curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles
 
 
 # sudo su -
-mkdir -p root/downloads && cd root/downloads
+# mkdir -p root/downloads && cd root/downloads
+cd ${HOME}/downloads
 KLBASE=https://github.com/Azure/kubelogin/releases/download
-KLVERSION=v0.1.0
+KLVERSION=v0.1.3
 KLFILE=kubelogin-linux-amd64.zip
 KUBELOGIN_URL=${KLBASE}/${KLVERSION}/${KLFILE}
 curl -LO ${KUBELOGIN_URL}
-sudo unzip ${KLFILE}
+unzip ${KLFILE}
 # accept whatever this throws
-rm -rf /usr/local/bin/
+rm -rf /usr/local/bin/kubelogin
 mv bin/linux_amd64/kubelogin /usr/local/bin/
 chmod +x /usr/local/bin/kubelogin
 
