@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 { # this ensures the entire script is downloaded #
-# apt update
+# apt updat
 sudo apt-get update -y
 
 # basic stuff
