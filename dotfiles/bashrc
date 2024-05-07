@@ -23,6 +23,8 @@ esac
 # Set to superior editing mode
 set -o vi
 
+# keybinds
+bind -x '"\C-l":clear'
 
 # ==================== Environment Variables ====================
 

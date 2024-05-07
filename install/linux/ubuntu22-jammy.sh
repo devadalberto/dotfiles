@@ -103,9 +103,10 @@ curl https://pyenv.run | sh
 # oh my bash
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
 
+sleep 3s
 # bashrc file
-mv ~/.bashrc{,.bak}
-mv ~/.bash_profile{,.bak}
+mv ${HOME}/.bashrc{,.bak}
+mv ${HOME}/.bash_profile{,.bak}
 curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/bashrc > ${HOME}/.bashrc
 curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/bash_profile > ${HOME}/.bash_profile
 curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/tmuxconf > ${HOME}/.tmux.conf
@@ -127,13 +128,15 @@ curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/config/f
 
 
 echo "================ Reloading RC file =================="
-sleep 10s
 
 # reload your bashrc
 echo "source ${HOME}/.bashrc" | sh
 
+echo "+ - * + - * + - * + - * + - * + - * + - * + - * + - * + - * + - * + - * + - * + - * + - * + - *"
+echo "TESTING - 3 mins to close... check the RC file"
+sleep 195s
 echo "================ Continue ...======================"
-sleep 5s
+sleep 15s
 
 # create folders
 # mkdir -p ${SCRIPTS}
