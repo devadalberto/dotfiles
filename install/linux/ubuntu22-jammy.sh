@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-
 { # this ensures the entire script is downloaded #
 # apt update
 sudo apt-get update -y
 
 # basic stuff
 sudo apt-get install -y gcc \
+	g++ \
 	make \
 	universal-ctags \
 	exuberant-ctags \
@@ -39,11 +39,35 @@ sudo apt install -y build-essential \
 	dnsutils \
 	neofetch \
 	rust-all \
-	cargo
+	unzip \
+	cargo 
 
 
 # Nerdfonts
 curl -fsSL https://raw.githubusercontent.com/getnf/getnf/main/install.sh | bash
+
+# create directories
+export XDG_CONFIG_HOME="$HOME"/.config
+mkdir -p "$XDG_CONFIG_HOME"/bash
+mkdir -p "$XDG_CONFIG_HOME"/alacritty
+mkdir -p "$XDG_CONFIG_HOME"/alacritty/themes
+mkdir -p "$XDG_CONFIG_HOME"/skhd
+mkdir -p "$XDG_CONFIG_HOME"/k9s
+# mkdir -p "$XDG_CONFIG_HOME"/wezterm
+
+git clone https://github.com/alacritty/alacritty-theme "$XDG_CONFIG_HOME"/alacritty/themes
+
+# Symbolic links
+
+# ln -s ./.amethyst.yml "$HOME"/.amethyst.yml
+ln -sf "$PWD/alacritty.toml" "$XDG_CONFIG_HOME"/alacritty/alacritty.toml
+ln -sf "$PWD/k9s/skin.yml" "$XDG_CONFIG_HOME"/k9s/skin.yml
+ln -sf "$PWD/.bash_profile" "$HOME"/.bash_profile
+ln -sf "$PWD/.bashrc" "$HOME"/.bashrc
+ln -sf "$PWD/.inputrc" "$HOME"/.inputrc
+ln -sf "$PWD/.tmux.conf" "$HOME"/.tmux.conf
+ln -sf "$PWD/nvim" "$XDG_CONFIG_HOME"/nvim
+# ln -sf "$PWD/skhdrc" "$XDG_CONFIG_HOME"/skhd/skhdrc
 
 # go (golang)
 mkdir -p $HOME/downloads
@@ -53,6 +77,9 @@ GO_INSTALLER=go${GO_VER}.linux-amd64.tar.gz
 GO_FILE_URL=https://go.dev/dl/${GO_INSTALLER}
 curl -sSL ${GO_FILE_URL} > ${GO_INSTALLER}
 sudo tar -zxvf ${GO_INSTALLER} -C /usr/local/
+
+#
+sudo apt-get install fd fzf kubectl kubectx derailed/k9s/k9s starship
 
 
 # NVM - NodeJS Version Manager
@@ -86,16 +113,23 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/mast
 
 # bashrc file
 mv ${HOME}/.bashrc{,.bak}
-touch ${HOME}/.bashrc
-curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/bashrc >> ${HOME}/.bashrc
+mv ${HOME}/.bash_profile{,.bak}
+# touch ${HOME}/.bashrc
+# touch ${HOME}/.bash_profile
+curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/bashrc > ${HOME}/.bashrc
+curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/bash_profile > ${HOME}/.bash_profile
 
 # reload your bashrc
-source ~/.bashrc
+bash -c "$(source ~/.bashrc)"
 
+sleep 25s
+
+# create some folders
+mkdir -p ${SCRIPTS}
+mkdir -p ${DOTNET_ROOT}
 
 # lazygit - you need to have go installed
 cd ~/downloads
-source ~/.bashrc
 
 git clone https://github.com/jesseduffield/lazygit.git
 cd lazygit
