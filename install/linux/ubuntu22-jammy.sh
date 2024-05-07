@@ -188,7 +188,8 @@ sudo make install
 ## dotnet installation
 cd ${HOME}/downloads
 OSVER="$(lsb_release -rs)"
-LDISTRO="$(lsb_release --id --short)"
+DISTRO="$(lsb_release --id --short)"
+LDISTRO=$(echo ${LDISTRO} | tr '[:upper:]' '[:lower:]')
 curl -LO https://packages.microsoft.com/config/${LDISTRO}/${OSVER}/packages-microsoft-prod.deb
 sudo dpkg -i packages-microsoft-prod.deb
 # rm packages-microsoft-prod.deb
