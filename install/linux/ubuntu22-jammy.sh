@@ -37,26 +37,13 @@ sudo apt install -y build-essential \
 	tk-dev \
 	liblzma-dev \
 	dnsutils \
-	neofetch
+	neofetch \
+	rust-all \
+	cargo
 
-# a starting bashrc file
-mv ~/.bashrc{,.bak}
-curl -sSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/bashrc -o ~/.bashrc
-source ~/.bashrc
-
-echo "testing ended, make sure to break out of this prompt with CTRL+C"
-sleep 4d 4h
-echo "try period ended, adding time to break out of this window"
-sleep 4d 4h
-echo "try period ended, adding time to break out of this window"
 
 # Nerdfonts
-curl -sSL https://raw.githubusercontent.com/getnf/getnf/main/install.sh | bash
-
-# NVM - NodeJS Version Manager
-curl -sSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-
-
+curl -fsSL https://raw.githubusercontent.com/getnf/getnf/main/install.sh | bash
 
 # go (golang)
 mkdir -p $HOME/downloads
@@ -66,6 +53,10 @@ GO_INSTALLER=go${GO_VER}.linux-amd64.tar.gz
 GO_FILE_URL=https://go.dev/dl/${GO_INSTALLER}
 curl -sSL ${GO_FILE_URL} > ${GO_INSTALLER}
 sudo tar -zxvf ${GO_INSTALLER} -C /usr/local/
+
+
+# NVM - NodeJS Version Manager
+curl -sSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 
 # neovim
 mkdir -p ~/downloads/neovim && cd ~/downloads/neovim
@@ -87,15 +78,22 @@ git clone https://github.com/LazyVim/starter ~/.config/nvim
 # remove the .git folder, so you can add it to your own repo later
 rm -rf ~/.config/nvim/.git
 
+# pyenv
+curl https://pyenv.run | bash
+
+# bashrc file
+mv ${HOME}/.bashrc{,.bak}
+touch ${HOME}/.bashrc
+curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/bashrc >> ${HOME}/.bashrc
+
+# reload your bashrc
+source ~/.bashrc
+
 # lazygit - you need to have go installed
 cd ~/downloads
 git clone https://github.com/jesseduffield/lazygit.git
 cd lazygit
 go install
-
-
-# reload your bashrc
-source ~/.bashrc
 
 # install Node
 nvm install --lts
@@ -104,46 +102,15 @@ nvm install-latest-npm
 # install nerdfonts
 getnf -i UbuntuMono
 
-# pyenv
-curl https://pyenv.run | bash
 # pyenv install --list | grep 3.12
 # below install command takes a while, be patient
 pyenv install 3.12.2
 # set the python version as global
 pyenv global 3.12.2
 
-# docker
-# uninstall any current install
-for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
-
-sudo install -m 0755 -d /etc/apt/keyrings
-
-#download the installer files
-mkdir -p ~/downloads
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg > ~/downloads/docker.asc
-sudo cp ~/downloads/docker.asc /etc/apt/keyrings/docker.asc 
-sudo chmod a+r /etc/apt/keyrings/docker.asc
-
-# Add the repository to Apt sources:
-echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt-get update
-
-# install docker
-sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-
-# create docker group
-sudo groupadd docker
-
-# Add your user to the docker group
-sudo usermod -aG docker $USER
-
 # terraform
 sudo apt-get install -y gpg unzip software-properties-common gnupg2 lsb-release
 cd ~/downloads
-# wget -O-
 curl -LO  https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
 
@@ -163,6 +130,45 @@ make
 make verify   # (optional)
 sudo make install
 
+## dotnet installation
+OSVER="$(lsb_release -rs)"
+LDISTRO="$(lsb_release --id --short)"
+curl -LO https://packages.microsoft.com/config/${LDISTRO}/${OSVER}/packages-microsoft-prod.deb
+sudo dpkg -i packages-microsoft-prod.deb
+rm packages-microsoft-prod.deb
+
+sudo apt-get update
+sudo apt-get install -y dotnet-sdk-7.0
+sudo apt-get install -y aspnetcore-runtime-7.0
+
+sudo apt-get install -y dotnet-sdk-8.0
+sudo apt-get install -y aspnetcore-runtime-8.0
+
+
+## install starship
+
+```shell
+curl -sS https://starship.rs/install.sh | sh
+```
+mkdir -p ${HOME}/.config
+mv ${HOME}/.config/starship.toml{,.bak}
+touch ${HOME}/.config/starship.toml
+curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/starship.toml >> ${HOME}/.config/starship.toml
+
+
+# sudo su -
+mkdir -p root/downloads && cd root/downloads
+KLBASE=https://github.com/Azure/kubelogin/releases/download
+KLVERSION=v0.1.0
+KLFILE=kubelogin-linux-amd64.zip
+KUBELOGIN_URL=${KLBASE}/${KLVERSION}/${KLFILE}
+curl -LO ${KUBELOGIN_URL}
+sudo unzip ${KLFILE}
+# accept whatever this throws
+rm -rf /usr/local/bin/
+mv bin/linux_amd64/kubelogin /usr/local/bin/
+chmod +x /usr/local/bin/kubelogin
+
 # download and install tmux
 mkdir -p ~/downloads/tmux && cd ~/downloads/tmux
 git clone https://github.com/tmux/tmux.git
@@ -170,9 +176,37 @@ cd tmux
 sh autogen.sh
 ./configure && make
 sudo make install
-
 clear
 
-RU=$(basename $(eval echo "~$pwd"))
+# # Not tested yet
+# # docker
+# # uninstall any current install
+# for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
+
+# sudo install -m 0755 -d /etc/apt/keyrings
+
+# #download the installer files
+# mkdir -p ~/downloads
+# curl -fsSL https://download.docker.com/linux/ubuntu/gpg > ~/downloads/docker.asc
+# sudo cp ~/downloads/docker.asc /etc/apt/keyrings/docker.asc 
+# sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# # Add the repository to Apt sources:
+# echo \
+#   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+#   $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+#   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+# sudo apt-get update
+
+# # install docker
+# sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+# # create docker group
+# sudo groupadd docker
+
+# # Add your user to the docker group
+# sudo usermod -aG docker $USER
+
+# # RU=$(basename $(eval echo "~$pwd"))
 
 } # this ensures the entire script is downloaded #
