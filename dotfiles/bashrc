@@ -19,6 +19,52 @@ esac
 # export FTP_PROXY="$PROXY_URL"
 # export NO_PROXY="127.0.0.1,localhost,192.168.1.1,:1"
 
+# ----
+# oh-my-bash Path and config.
+export OSH="${HOME}/.oh-my-bash"
+
+OSH_THEME="font"
+
+OMB_USE_SUDO=true
+
+# Add wisely, as too many completions slow down shell startup.
+completions=(
+        git
+        composer
+        ssh
+)
+
+# Which aliases would you like to load? (aliases can be found in ~/.oh-my-bash/aliases/*)
+# Custom aliases may be added to ~/.oh-my-bash/custom/aliases/
+# Example format: aliases=(vagrant composer git-avh)
+# Add wisely, as too many aliases slow down shell startup.
+aliases=(
+        general
+)
+
+# Which plugins would you like to load? (plugins can be found in ~/.oh-my-bash/plugins/*)
+# Custom plugins may be added to ~/.oh-my-bash/custom/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+plugins=(
+        ansible
+        bashmarks
+        git
+        kubectl
+        npm
+        nvm
+        pyenv
+)
+
+# Which plugins would you like to conditionally load? (plugins can be found in ~/.oh-my-bash/plugins/*)
+# Custom plugins may be added to ~/.oh-my-bash/custom/plugins/
+# Example format:
+ if [ "$DISPLAY" ] || [ "$SSH" ]; then
+     plugins+=(tmux-autoattach)
+ fi
+
+source "$OSH"/oh-my-bash.sh
+# ----
 
 # Set to superior editing mode
 set -o vi
@@ -161,47 +207,6 @@ eval "$(pyenv init -)"
 
 # get-nerd-fonts path
 export PATH="$PATH:~/.local/bin"
-
-# oh-my-bash Path and config.
-export OSH="${HOME}/.oh-my-bash"
-
-OSH_THEME="font"
-
-OMB_USE_SUDO=true
-
-# Add wisely, as too many completions slow down shell startup.
-completions=(
-        git
-        composer
-        ssh
-)
-
-# Which aliases would you like to load? (aliases can be found in ~/.oh-my-bash/aliases/*)
-# Custom aliases may be added to ~/.oh-my-bash/custom/aliases/
-# Example format: aliases=(vagrant composer git-avh)
-# Add wisely, as too many aliases slow down shell startup.
-aliases=(
-        general
-)
-
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-bash/plugins/*)
-# Custom plugins may be added to ~/.oh-my-bash/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(
-        git
-        bashmarks
-)
-
-# Which plugins would you like to conditionally load? (plugins can be found in ~/.oh-my-bash/plugins/*)
-# Custom plugins may be added to ~/.oh-my-bash/custom/plugins/
-# Example format:
-#  if [ "$DISPLAY" ] || [ "$SSH" ]; then
-#      plugins+=(tmux-autoattach)
-#  fi
-
-source "$OSH"/oh-my-bash.sh
-# ----
 
 # neovim path
 export PATH="$PATH:/opt/nvim-linux64/bin"

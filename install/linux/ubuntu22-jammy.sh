@@ -47,11 +47,15 @@ sudo apt install -y build-essential \
 	rust-all \
 	unzip \
 	ncurses-* \
-	ripgrep
+	ripgrep \
+	vim-nox
 
 
 # Nerdfonts
 curl -fsSL https://raw.githubusercontent.com/getnf/getnf/main/install.sh | sh
+
+# NVM - NodeJS Version Manager
+curl -sSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | sh
 
 # create directories
 export XDG_CONFIG_HOME=${HOME}/.config
@@ -74,8 +78,6 @@ GO_FILE_URL=https://go.dev/dl/${GO_INSTALLER}
 curl -sSL ${GO_FILE_URL} > ${GO_INSTALLER}
 sudo tar -zxvf ${GO_INSTALLER} -C /usr/local/
 
-# NVM - NodeJS Version Manager
-curl -sSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | sh
 
 # neovim
 mkdir -p ~/downloads/neovim && cd ~/downloads/neovim
@@ -101,12 +103,13 @@ rm -rf ~/.config/nvim/.git
 curl https://pyenv.run | sh
 
 # oh my bash
+# rm -rf ${HOME}/.oh-my-bash/
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
 
 sleep 3s
 # bashrc file
-mv ${HOME}/.bashrc{,.bak}
-mv ${HOME}/.bash_profile{,.bak}
+mv ${HOME}/.bashrc ${HOME}/bashrc.bak
+mv ${HOME}/.bash_profile ${HOME}/.bash_profile.bak
 curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/bashrc > ${HOME}/.bashrc
 curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/bash_profile > ${HOME}/.bash_profile
 curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/tmuxconf > ${HOME}/.tmux.conf
