@@ -87,12 +87,12 @@ sudo tar -C /opt -xzf nvim-linux64.tar.gz
 
 
 # lazyvim
-mv ~/.config/nvim{,.bak}
+mv ~/.config/nvim ~/.config/nvim.bak
 
 # optional but recommended
-mv ~/.local/share/nvim{,.bak}
-mv ~/.local/state/nvim{,.bak}
-mv ~/.cache/nvim{,.bak}
+mv ~/.local/share/nvim ~/.local/share/nvim.bak
+mv ~/.local/state/nvim ~/.local/state/nvim.bak
+mv ~/.cache/nvim ~/.cache/nvim.bak
 
 git clone https://github.com/LazyVim/starter ~/.config/nvim
 
@@ -212,7 +212,7 @@ sudo apt-get install -y aspnetcore-runtime-8.0
 curl -sS https://starship.rs/install.sh | sh
 
 mkdir -p ${HOME}/.config
-mv ${HOME}/.config/starship.toml{,.bak}
+mv ${HOME}/.config/starship.toml ${HOME}/.config/starship.toml.bak
 touch ${HOME}/.config/starship.toml
 curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/starship.toml > ${HOME}/.config/starship.toml
 
