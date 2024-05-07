@@ -184,9 +184,7 @@ echo "================ Reloading RC file =================="
 # reload your bashrc
 # echo "source ${HOME}/.bashrc" | bash
 eval "$(cat ~/.bashrc | tail -n +10)"
-
-echo "+ - * + - * + - * + - * + - * + - * + - * + - * + - * + - * + - * + - * + - * + - * + - * + - *"
-sleep 15s
+sleep 5s
 
 # lazygit - you need to have go(lang) installed
 cd ${HOME}/downloads
@@ -197,15 +195,15 @@ go install
 # install Node
 clear
 echo "================ installing node with NVM ...======================"
-sleep 5s
 nvm install --lts
 nvm install-latest-npm
 
 echo "================ finished node installer ...======================"
-sleep 10s
+sleep 3s
 
 # install nerdfonts
 getnf -i UbuntuMono
+sleep 3s
 
 # pyenv install --list | grep 3.12
 # below install command takes a while, be patient
@@ -213,6 +211,7 @@ echo ":::::::::::::::::::::::::::: below install command takes a while, be patie
 pyenv install 3.12.2
 # set the python version as global
 pyenv global 3.12.2
+sleep 3s
 
 # tmux
 # libevent (pre-req)
@@ -231,24 +230,26 @@ sudo make install
 cd ${HOME}/downloads
 OSVER="$(lsb_release -rs)"
 DISTRO="$(lsb_release --id --short)"
-LDISTRO=$(echo ${LDISTRO} | tr '[:upper:]' '[:lower:]')
+LDISTRO="$(echo ${DISTRO} | tr '[:upper:]' '[:lower:]')"
 curl -LO https://packages.microsoft.com/config/${LDISTRO}/${OSVER}/packages-microsoft-prod.deb
 sudo dpkg -i packages-microsoft-prod.deb
 # rm packages-microsoft-prod.deb
 
 sudo apt-get update
+echo "================ installing dotnet sdk and aspnetcore-runtime 7 & 8 ...======================"
 sudo apt-get install -y dotnet-sdk-7.0
 sudo apt-get install -y aspnetcore-runtime-7.0
-
 sudo apt-get install -y dotnet-sdk-8.0
 sudo apt-get install -y aspnetcore-runtime-8.0
-
-curl -sS https://starship.rs/install.sh | bash
-
+echo "================ DONE! installing dotnet sdk and aspnetcore-runtime 7 & 8 ...======================"
+sleep 3s
+echo "================ installing starship ...======================"
+curl -sS https://starship.rs/install.sh | sh
 mkdir -p ${HOME}/.config
 mv ${HOME}/.config/starship.toml ${HOME}/.config/starship.toml.bak
 touch ${HOME}/.config/starship.toml
 curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/starship.toml > ${HOME}/.config/starship.toml
+echo "================ DONE! installing starship ...======================"
 
 # # Not tested yet
 # # docker
@@ -286,5 +287,7 @@ rm -rf ${HOME}/downloads/*
 
 # reload your bashrc one last time
 eval "$(cat ~/.bashrc | tail -n +10)"
-
+echo "========================================================================================================="
+echo "script finished, close all your terminal windows and relaunch your terminal"
+echo "========================================================================================================="
 } # this ensures the entire script is downloaded #
