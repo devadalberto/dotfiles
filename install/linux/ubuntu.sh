@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 { # this ensures the entire script is downloaded #
-
 ########
 # script variables / constants
+read -s -p "Enter Password for sudo: " sudoPW
 OSVER="$(lsb_release -rs)"
 DISTRO="$(lsb_release --id --short)"
 LDISTRO="$(echo ${DISTRO} | tr '[:upper:]' '[:lower:]')"
 ########
 # apt update
-sudo apt-get update -y
-
+echo $sudoPW | apt-get update -y
+sleep 25s
 # basic stuff
-sudo apt-get install -y gcc \
+echo $sudoPW | apt-get install -y gcc \
 	g++ \
 	make \
 	universal-ctags \
@@ -33,10 +33,10 @@ sudo apt-get install -y gcc \
 # python for the OS
 case $OSVER in
   24.04)
-  sudo apt-get install python3.12 python3.12-full python3.12-dev python3.12-venv python3-poetry -y
+  echo $sudoPW | apt-get install python3.12 python3.12-full python3.12-dev python3.12-venv python3-poetry -y
   ;;
   22.04)
-  sudo apt-get install python3.11 python3.11-full python3.11-dev python3.11-venv python3-poetry -y
+  echo $sudoPW | apt-get install python3.11 python3.11-full python3.11-dev python3.11-venv python3-poetry -y
   ;;
   *)
   echo "This script is not compatible with: ${LDISTRO} ${OSVER}"
@@ -46,7 +46,7 @@ esac
 
 
 # some more tools and libs
-sudo apt install -y build-essential \
+echo $sudoPW | apt install -y build-essential \
 	zlib1g-dev \
 	libncurses5-dev \
 	libgdbm-dev \
@@ -95,14 +95,14 @@ GO_VER='1.22.2'
 GO_INSTALLER=go${GO_VER}.linux-amd64.tar.gz
 GO_FILE_URL=https://go.dev/dl/${GO_INSTALLER}
 curl -sSL ${GO_FILE_URL} > ${GO_INSTALLER}
-sudo tar -zxvf ${GO_INSTALLER} -C /usr/local/
+echo $sudoPW | tar -zxvf ${GO_INSTALLER} -C /usr/local/
 
 
 # neovim
 mkdir -p ${HOME}/downloads/neovim && cd ${HOME}/downloads/neovim
 curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
-sudo rm -rf /opt/nvim
-sudo tar -C /opt -xzf nvim-linux64.tar.gz
+echo $sudoPW | rm -rf /opt/nvim
+echo $sudoPW | tar -C /opt -xzf nvim-linux64.tar.gz
 
 
 # lazyvim
@@ -150,10 +150,10 @@ curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/config/f
 
 # hashicorp / tf
 cd ${HOME}/downloads/
-curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+curl -fsSL https://apt.releases.hashicorp.com/gpg | echo $sudoPW | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
 gpg --no-default-keyring --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg --fingerprint
 
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | echo $sudoPW | tee /etc/apt/sources.list.d/hashicorp.list
 
 ####################################################333
 # Kubernetes - k8s
@@ -165,13 +165,13 @@ echo "installing for k8s MajorVer: ${KVER}"
 mkdir -p /usr/share/keyrings
 
 cd ${HOME}/downloads
-curl -fsSL https://pkgs.k8s.io/core:/stable:/${KVER}/deb/Release.key | sudo gpg --dearmor -o /usr/share/keyrings/kubernetes-apt-keyring.gpg
+curl -fsSL https://pkgs.k8s.io/core:/stable:/${KVER}/deb/Release.key | echo $sudoPW | gpg --dearmor -o /usr/share/keyrings/kubernetes-apt-keyring.gpg
 # allow unprivileged APT programs to read this keyring
-sudo chmod 644 /usr/share/keyrings/kubernetes-apt-keyring.gpg
+echo $sudoPW | chmod 644 /usr/share/keyrings/kubernetes-apt-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/${KVER}/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
-sudo apt-get update -y
-sudo apt-get install -y terraform kubectl
+echo $sudoPW | apt-get update -y
+echo $sudoPW | apt-get install -y terraform kubectl
 
 # Install Kubelogin
 # sudo su -
@@ -184,9 +184,9 @@ KUBELOGIN_URL=${KLBASE}/${KLVERSION}/${KLFILE}
 curl -LO ${KUBELOGIN_URL}
 unzip ${KLFILE}
 # accept whatever this throws
-rm -rf /usr/local/bin/kubelogin
-mv bin/linux_amd64/kubelogin /usr/local/bin/
-chmod +x /usr/local/bin/kubelogin
+echo $sudoPW | rm -rf /usr/local/bin/kubelogin
+echo $sudoPW | mv bin/linux_amd64/kubelogin /usr/local/bin/
+echo $sudoPW | chmod +x /usr/local/bin/kubelogin
 
 # download and install tmux
 mkdir -p ${HOME}/downloads/tmux && cd ${HOME}/downloads/tmux
@@ -194,7 +194,7 @@ git clone https://github.com/tmux/tmux.git
 cd tmux
 sh autogen.sh
 ./configure && make
-sudo make install
+echo $sudoPW | make install
 clear
 
 
@@ -238,25 +238,25 @@ sleep 3s
 # sudo apt install -y ncurses-*
 cd ${HOME}/downloads
 curl -LO https://github.com/libevent/libevent/releases/download/release-2.1.12-stable/libevent-2.1.12-stable.tar.gz
-sudo tar -C ${HOME}/downloads -xzf libevent-2.1.12-stable.tar.gz
+echo $sudoPW | tar -C ${HOME}/downloads -xzf libevent-2.1.12-stable.tar.gz
 cd libevent-2.1.12-stable
 ./configure
 make
 make verify   # (optional)
-sudo make install
+echo $sudoPW | make install
 
 ## dotnet installation
 cd ${HOME}/downloads
 curl -LO https://packages.microsoft.com/config/${LDISTRO}/${OSVER}/packages-microsoft-prod.deb
-sudo dpkg -i packages-microsoft-prod.deb
+echo $sudoPW | dpkg -i packages-microsoft-prod.deb
 # rm packages-microsoft-prod.deb
 
-sudo apt-get update
+echo $sudoPW | apt-get update
 echo "================ installing dotnet sdk and aspnetcore-runtime 7 & 8 ...======================"
-sudo apt-get install -y dotnet-sdk-7.0
-sudo apt-get install -y aspnetcore-runtime-7.0
-sudo apt-get install -y dotnet-sdk-8.0
-sudo apt-get install -y aspnetcore-runtime-8.0
+echo $sudoPW | apt-get install -y dotnet-sdk-7.0
+echo $sudoPW | apt-get install -y aspnetcore-runtime-7.0
+echo $sudoPW | apt-get install -y dotnet-sdk-8.0
+echo $sudoPW | apt-get install -y aspnetcore-runtime-8.0
 echo "================ DONE! installing dotnet sdk and aspnetcore-runtime 7 & 8 ...======================"
 sleep 3s
 echo "================ installing starship ...======================"
@@ -300,6 +300,12 @@ echo "================ DONE! installing starship ...======================"
 
 # some housekeeping
 rm -rf ${HOME}/downloads/*
+
+# reload your bashrc
+eval "$(cat ~/.bashrc | tail -n +10)"
+
+# apt update
+echo $sudoPW | apt-get update -y
 
 # reload your bashrc one last time
 eval "$(cat ~/.bashrc | tail -n +10)"
