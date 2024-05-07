@@ -113,7 +113,8 @@ curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles
 curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/config/files/alacritty.toml > ${XDG_CONFIG_HOME}/alacritty.toml
 curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/config/files/starship.toml > ${XDG_CONFIG_HOME}/starship.toml
 
-# Symbolic links
+# Symbolic links - 
+# FUTURE: Configure this repo to run after the repo is cloned
 # ln -s ./.amethyst.yml "$HOME"/.amethyst.yml
 # ln -sf "$PWD/alacritty.toml" "$XDG_CONFIG_HOME"/alacritty/alacritty.toml
 # ln -sf "$PWD/k9s/skin.yml" "$XDG_CONFIG_HOME"/k9s/skin.yml
@@ -130,10 +131,12 @@ bash -c "$(source ~/.bashrc)"
 echo "================ SLEEPING ================================="
 sleep 15s
 
+source ${HOME}/.bashrc
+
 echo "================ WAKING UP ...======================"
 sleep 10s
 
-# create some folders
+# create folders
 # mkdir -p ${SCRIPTS}
 # mkdir -p ${DOTNET_ROOT}
 
@@ -144,12 +147,15 @@ git clone https://github.com/jesseduffield/lazygit.git
 cd lazygit
 go install
 
-
-
 # install Node
+clear
+echo "================ installing node with NVM ...======================"
+sleep 5s
 nvm install --lts
 nvm install-latest-npm
 
+echo "================ finished node installer ...======================"
+sleep 10s
 # install nerdfonts
 getnf -i UbuntuMono
 
