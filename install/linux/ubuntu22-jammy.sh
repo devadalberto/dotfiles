@@ -70,8 +70,8 @@ mkdir -p ${XDG_CONFIG_HOME}/k9s
 git clone https://github.com/alacritty/alacritty-theme ${XDG_CONFIG_HOME}/alacritty/themes
 
 # go (golang)
-mkdir -p ~/downloads
-cd ~/downloads/
+mkdir -p ${HOME}/downloads
+cd ${HOME}/downloads/
 GO_VER='1.22.2'
 GO_INSTALLER=go${GO_VER}.linux-amd64.tar.gz
 GO_FILE_URL=https://go.dev/dl/${GO_INSTALLER}
@@ -80,24 +80,24 @@ sudo tar -zxvf ${GO_INSTALLER} -C /usr/local/
 
 
 # neovim
-mkdir -p ~/downloads/neovim && cd ~/downloads/neovim
+mkdir -p ${HOME}/downloads/neovim && cd ${HOME}/downloads/neovim
 curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
 sudo rm -rf /opt/nvim
 sudo tar -C /opt -xzf nvim-linux64.tar.gz
 
 
 # lazyvim
-mv ~/.config/nvim ~/.config/nvim.bak
+mv ${XDG_CONFIG_HOME}/nvim ${XDG_CONFIG_HOME}/nvim.bak
 
 # optional but recommended
 mv ~/.local/share/nvim ~/.local/share/nvim.bak
 mv ~/.local/state/nvim ~/.local/state/nvim.bak
 mv ~/.cache/nvim ~/.cache/nvim.bak
 
-git clone https://github.com/LazyVim/starter ~/.config/nvim
+git clone https://github.com/LazyVim/starter ${XDG_CONFIG_HOME}/nvim
 
 # remove the .git folder, so you can add it to your own repo later
-rm -rf ~/.config/nvim/.git
+rm -rf ${XDG_CONFIG_HOME}/nvim/.git
 
 # pyenv
 curl -o- https://pyenv.run | bash
@@ -136,17 +136,10 @@ echo "================ Reloading RC file =================="
 echo "source ${HOME}/.bashrc" | bash
 
 echo "+ - * + - * + - * + - * + - * + - * + - * + - * + - * + - * + - * + - * + - * + - * + - * + - *"
-echo "TESTING - 3 mins to close... check the RC file"
-sleep 195s
-echo "================ Continue ...======================"
 sleep 15s
 
-# create folders
-# mkdir -p ${SCRIPTS}
-# mkdir -p ${DOTNET_ROOT}
-
 # lazygit - you need to have go(lang) installed
-cd ~/downloads
+cd ${HOME}/downloads
 git clone https://github.com/jesseduffield/lazygit.git
 cd lazygit
 go install
@@ -171,7 +164,7 @@ pyenv install 3.12.2
 pyenv global 3.12.2
 
 # terraform
-cd ~/downloads
+cd ${HOME}/downloads
 curl -LO  https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
 
@@ -182,9 +175,9 @@ sudo apt-get install terraform
 # libevent (pre-req)
 # sudo apt-get install -y autoconf automake pkg-config bash-completion bison
 sudo apt install -y ncurses-*
-cd ~/downloads
+cd ${HOME}/downloads
 curl -LO https://github.com/libevent/libevent/releases/download/release-2.1.12-stable/libevent-2.1.12-stable.tar.gz
-sudo tar -C ~/downloads -xzf libevent-2.1.12-stable.tar.gz
+sudo tar -C ${HOME}/downloads -xzf libevent-2.1.12-stable.tar.gz
 cd libevent-2.1.12-stable
 ./configure
 make
@@ -232,7 +225,7 @@ mv bin/linux_amd64/kubelogin /usr/local/bin/
 chmod +x /usr/local/bin/kubelogin
 
 # download and install tmux
-mkdir -p ~/downloads/tmux && cd ~/downloads/tmux
+mkdir -p ${HOME}/downloads/tmux && cd ${HOME}/downloads/tmux
 git clone https://github.com/tmux/tmux.git
 cd tmux
 sh autogen.sh
@@ -248,9 +241,9 @@ clear
 # sudo install -m 0755 -d /etc/apt/keyrings
 
 # #download the installer files
-# mkdir -p ~/downloads
-# curl -fsSL https://download.docker.com/linux/ubuntu/gpg > ~/downloads/docker.asc
-# sudo cp ~/downloads/docker.asc /etc/apt/keyrings/docker.asc 
+# mkdir -p ${HOME}/downloads
+# curl -fsSL https://download.docker.com/linux/ubuntu/gpg > ${HOME}/downloads/docker.asc
+# sudo cp ${HOME}/downloads/docker.asc /etc/apt/keyrings/docker.asc 
 # sudo chmod a+r /etc/apt/keyrings/docker.asc
 
 # # Add the repository to Apt sources:
