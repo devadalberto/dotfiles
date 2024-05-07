@@ -208,7 +208,7 @@ curl -sS https://starship.rs/install.sh | sh
 mkdir -p ${HOME}/.config
 mv ${HOME}/.config/starship.toml{,.bak}
 touch ${HOME}/.config/starship.toml
-curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/starship.toml >> ${HOME}/.config/starship.toml
+curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/starship.toml > ${HOME}/.config/starship.toml
 
 
 # sudo su -
@@ -267,5 +267,8 @@ clear
 
 # some housekeeping
 rm -rf ${HOME}/downloads/*
+
+# reload your bashrc
+echo "source ${HOME}/.bashrc" | sh
 
 } # this ensures the entire script is downloaded #
