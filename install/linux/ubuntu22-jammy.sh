@@ -15,6 +15,12 @@ sudo apt-get install -y gcc \
     ca-certificates \
     git \
 	lsb-release \
+	software-properties-common \
+	autoconf \
+	automake \
+	pkg-config \
+	bash-completion \
+	bison \
 	telnet
 
 # python3.11 for the OS
@@ -48,16 +54,16 @@ sudo apt install -y build-essential \
 curl -fsSL https://raw.githubusercontent.com/getnf/getnf/main/install.sh | bash
 
 # create directories
-export XDG_CONFIG_HOME="$HOME"/.config
-cd "$XDG_CONFIG_HOME"
-mkdir -p "$XDG_CONFIG_HOME"/bash
-mkdir -p "$XDG_CONFIG_HOME"/alacritty
-mkdir -p "$XDG_CONFIG_HOME"/alacritty/themes
-mkdir -p "$XDG_CONFIG_HOME"/k9s
+export XDG_CONFIG_HOME=${HOME}/.config
+cd ${XDG_CONFIG_HOME}
+mkdir -p ${XDG_CONFIG_HOME}/bash
+mkdir -p ${XDG_CONFIG_HOME}/alacritty
+mkdir -p ${XDG_CONFIG_HOME}/alacritty/themes
+mkdir -p ${XDG_CONFIG_HOME}/k9s
 # mkdir -p "$XDG_CONFIG_HOME"/skhd
 # mkdir -p "$XDG_CONFIG_HOME"/wezterm
 
-git clone https://github.com/alacritty/alacritty-theme "$XDG_CONFIG_HOME"/alacritty/themes
+git clone https://github.com/alacritty/alacritty-theme ${XDG_CONFIG_HOME}/alacritty/themes
 
 # go (golang)
 mkdir -p ~/downloads
@@ -104,8 +110,8 @@ curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles
 curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/bash_profile > ${HOME}/.bash_profile
 curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/tmuxconf > ${HOME}/.tmux.conf
 curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/inputrc > ${HOME}/.inputrc
-curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/alacritty.toml > ${XDG_CONFIG_HOME}/alacritty.toml
-curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/starship.toml > ${XDG_CONFIG_HOME}/starship.toml
+# curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/config/files/alacritty.toml > ${XDG_CONFIG_HOME}/alacritty.toml
+# curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/config/files/starship.toml > ${XDG_CONFIG_HOME}/starship.toml
 
 # Symbolic links
 # ln -s ./.amethyst.yml "$HOME"/.amethyst.yml
@@ -122,7 +128,7 @@ curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles
 bash -c "$(source ~/.bashrc)"
 
 echo "================ SLEEPING ================================="
-sleep 45s
+sleep 15s
 
 echo "================ WAKING UP ...======================"
 sleep 10s
@@ -154,7 +160,6 @@ pyenv install 3.12.2
 pyenv global 3.12.2
 
 # terraform
-sudo apt-get install -y gpg unzip software-properties-common gnupg2 lsb-release
 cd ~/downloads
 curl -LO  https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
