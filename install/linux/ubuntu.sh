@@ -45,8 +45,6 @@ case $OSVER in
   ;;
 esac
 
-
-
 # some more tools and libs
 echo $sudoPW | sudo apt install -y build-essential \
 	zlib1g-dev \
@@ -176,9 +174,21 @@ sudo chmod 644 /usr/share/keyrings/kubernetes-apt-keyring.gpg
 echo $sudoPW | sudo su -;
 echo "deb [signed-by=/usr/share/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/${KVER}/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
-echo $sudoPW | sudo su -;
-sudo apt-get update -y
-sudo apt-get install -y terraform kubectl
+
+echo $sudoPW | sudo su -; sudo apt-get update -y;
+
+case $OSVER in
+  24.04)
+  echo $sudoPW | sudo su -; curl -fsSL "https://dl.k8s.io/release/${KVER}/bin/linux/amd64/kubectl" > ${HOME}/downloads; sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+  ;;
+  22.04)
+  echo $sudoPW | sudo su -; sudo apt-get install -y terraform kubectl
+  ;;
+  *)
+  echo "This script is not compatible with: ${LDISTRO} ${OSVER}"
+  ;;
+esac
+
 
 # Install Kubelogin
 # mkdir -p root/downloads && cd root/downloads
