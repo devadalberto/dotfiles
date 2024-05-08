@@ -29,7 +29,7 @@ function install_docker() {
 	elif [[ $REPLY =~ ^[Nn]$ ]]; then
 		echo $sudoPW | sudo su -; do_housekeeping ; exit
 	else
-		install_docker()
+		exit
 	fi
 }
 #end region functions
