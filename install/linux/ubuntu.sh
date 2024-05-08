@@ -179,13 +179,14 @@ echo $sudoPW | sudo su -; sudo apt-get update -y;
 
 case $OSVER in
   24.04)
-  echo $sudoPW | sudo su -; curl -fsSL "https://dl.k8s.io/release/${KVER}/bin/linux/amd64/kubectl" > ${HOME}/downloads; sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+  echo $sudoPW | sudo su -; curl -fsSL "https://dl.k8s.io/release/${KVER}/bin/linux/amd64/kubectl" > ${HOME}/downloads; cd ${HOME}/downloads; sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
   ;;
   22.04)
   echo $sudoPW | sudo su -; sudo apt-get install -y terraform kubectl
   ;;
   *)
   echo "This script is not compatible with: ${LDISTRO} ${OSVER}"
+  echo "Make sure to check ksite to install on your System"
   ;;
 esac
 
