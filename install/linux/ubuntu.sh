@@ -21,7 +21,8 @@ function do_housekeeping() {
 }
 
 function install_docker() {
-	read -p "Do you wish to install docker desktop? (y/n)" -n 1 -r
+
+	read -p "Do you wish to install docker? (Y/n)" -n 1 -r
 	echo
 	if [[ $REPLY =~ ^[Yy]$ ]]; then
 		break
