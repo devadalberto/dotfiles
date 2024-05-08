@@ -296,7 +296,9 @@ echo "================ DONE! installing starship ...======================"
 echo $sudoPW | sudo su -; for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
 
 # podman
+echo "================ installing podman ======================"
 echo $sudoPW | sudo su -; sudo apt-get install -y podman podman-compose podman-docker podman-remote podman-toolbox python3-podman
+echo "================ DONE! installing podman ...======================"
 
 # reload your bashrc
 eval "$(cat ~/.bashrc | tail -n +10)";
