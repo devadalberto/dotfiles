@@ -287,7 +287,7 @@ sleep 2s
 echo "================ installing starship ...======================"
 echo $sudoPW | sudo su -;
 mkdir -p ${HOME}/.config
-curl -sS https://starship.rs/install.sh | sh
+curl -sS https://starship.rs/install.sh | sh -s -- -y
 mv ${HOME}/.config/starship.toml ${HOME}/.config/starship.toml.bak
 curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/starship.toml > ${HOME}/.config/starship.toml
 echo "================ DONE! installing starship ...======================"
