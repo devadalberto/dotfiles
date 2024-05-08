@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 { # this ensures the entire script is downloaded #
-########
+#######
 read -p "Enter Password for sudo: " sudoPW
 
 #region variables / constants
