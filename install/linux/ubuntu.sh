@@ -20,6 +20,18 @@ function do_housekeeping() {
 	echo $sudoPW | sudo su -; apt autoremove -y;
 	echo $sudoPW | sudo su -; apt autoclean -y;
 }
+
+function install_docker() {
+	read -p "Do you wish to install docker desktop? (y/n)" -n 1 -r
+	echo
+	if [[ $REPLY =~ ^[Yy]$ ]]; then
+		break
+	elif [[ $REPLY =~ ^[Nn]$ ]]; then
+		echo $sudoPW | sudo su -; do_housekeeping ; exit
+	else
+		echo "Please answer yes or no."
+	fi
+}
 #end region functions
 
 
@@ -296,17 +308,8 @@ echo "================ DONE! installing starship ...======================"
 
 
 # docker
-while true; do
-    read -p "Do you wish to install docker desktop? " yn
-    case $yn in
-        [Yy]* ) break
-		;;
-        [Nn]* ) echo $sudoPW | sudo su -; do_housekeeping ; exit
-		;;
-        * ) echo "Please answer yes or no."
-		;;
-    esac
-done
+echo $sudoPW | sudo su -; sudo install_docker()
+
 # uninstall any current install
 for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
 
