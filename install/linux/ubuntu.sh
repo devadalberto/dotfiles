@@ -15,9 +15,7 @@ USRLIB="/usr/lib"
 
 #region functions
 function do_housekeeping() {
-	echo $sudoPW | sudo su -; rm -rf ${HOME}/downloads/*;
-	echo $sudoPW | sudo su -; apt autoremove -y;
-	echo $sudoPW | sudo su -; apt autoclean -y;
+	sudo apt autoremove -y; sudo apt autoclean -y; sudo apt autopurge -y; sudo chown -R $USER $HOME/downloads; rm -rf ${HOME}/downloads/*
 }
 
 # function install_podman() {
@@ -314,7 +312,7 @@ echo "script finished, close all your terminal windows and relaunch your termina
 echo ""
 echo "if you want to get rid of the temporal files in case the cleanup didn't work run:"
 echo ""
-echo "sudo apt autoremove -y; sudo apt autoclean -y; rm -rf ${HOME}/downloads/*"
+echo "sudo apt autoremove -y; sudo apt autoclean -y; sudo chown -R $USER $HOME/downloads; rm -rf ${HOME}/downloads/*"
 echo ""
 echo "Cheers!"
 echo "========================================================================================================="
