@@ -299,9 +299,9 @@ install_docker()
 for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
 
 #download the installer files
-cd ${HOME}/downloads
 echo $sudoPW | sudo su -; sudo install -m 0755 -d ${KRPATH}
-echo $sudoPW | sudo su -; sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg; echo "$(cat gpg)" | sudo gpg --armor -o ${KRPATH}/docker.asc
+cd ${HOME}/downloads && curl -fsSL https://download.docker.com/linux/ubuntu/gpg
+echo "$(cat gpg)" | sudo gpg --armor -o ${KRPATH}/docker.asc
 echo $sudoPW | sudo su -; sudo chmod a+r ${KRPATH}/docker.asc
 
 # Add the repository to Apt sources:
