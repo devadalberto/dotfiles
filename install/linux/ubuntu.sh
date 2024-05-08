@@ -91,22 +91,22 @@ mkdir -p ${XDG_CONFIG_HOME}/k9s
 git clone https://github.com/alacritty/alacritty-theme ${XDG_CONFIG_HOME}/alacritty/themes
 
 # go (golang)
-echo $sudoPW | sudo su
+echo $sudoPW | sudo su -;
 mkdir -p ${HOME}/downloads
 cd ${HOME}/downloads/
 GO_VER='1.22.2'
 GO_INSTALLER=go${GO_VER}.linux-amd64.tar.gz
 GO_FILE_URL=https://go.dev/dl/${GO_INSTALLER}
 curl -sSL ${GO_FILE_URL} > ${GO_INSTALLER}
-echo $sudoPW | sudo su; tar -zxvf ${GO_INSTALLER} -C /usr/local/
+sudo tar -zxvf ${GO_INSTALLER} -C /usr/local/
 
 
 # neovim
-echo $sudoPW | sudo su -;
+sudo su -;
 mkdir -p ${HOME}/downloads/neovim && cd ${HOME}/downloads/neovim
 curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
-echo $sudoPW | sudo su -; rm -rf /opt/nvim
-echo $sudoPW | sudo su -; tar -C /opt -xzf nvim-linux64.tar.gz
+sudo su -; rm -rf /opt/nvim
+sudo su -; tar -C /opt -xzf nvim-linux64.tar.gz
 
 
 # lazyvim
@@ -153,7 +153,7 @@ curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/config/f
 # ln -sf "$PWD/skhdrc" "$XDG_CONFIG_HOME"/skhd/skhdrc
 
 # hashicorp / tf
-echo $sudoPW | sudo su -
+echo $sudoPW | sudo su -;
 cd ${HOME}/downloads/
 curl -fsSL https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
 gpg --no-default-keyring --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg --fingerprint
@@ -242,28 +242,32 @@ sleep 2s
 # libevent (pre-req)
 # sudo apt-get install -y autoconf automake pkg-config bash-completion bison
 # sudo apt install -y ncurses-*
+echo $sudoPW | sudo su -;
 cd ${HOME}/downloads
 curl -LO https://github.com/libevent/libevent/releases/download/release-2.1.12-stable/libevent-2.1.12-stable.tar.gz
-echo $sudoPW | sudo tar -C ${HOME}/downloads -xzf libevent-2.1.12-stable.tar.gz
+sudo tar -C ${HOME}/downloads -xzf libevent-2.1.12-stable.tar.gz
 cd libevent-2.1.12-stable
 ./configure
 make
 make verify   # (optional)
-echo $sudoPW | sudo make install
+sudo make install
 
 ## dotnet installation
+echo $sudoPW | sudo su -;
 cd ${HOME}/downloads
 curl -LO https://packages.microsoft.com/config/${LDISTRO}/${OSVER}/packages-microsoft-prod.deb
-echo $sudoPW | sudo dpkg -i packages-microsoft-prod.deb
+sudo dpkg -i packages-microsoft-prod.deb
 # rm packages-microsoft-prod.deb
 
-echo $sudoPW | sudo apt-get update
+echo $sudoPW | sudo su -;
+sudo apt-get update
 echo "================ installing dotnet sdk and aspnetcore-runtime 7 & 8 ...======================"
-echo $sudoPW | sudo apt-get install -y dotnet-sdk-7.0 aspnetcore-runtime-7.0
-echo $sudoPW | sudo apt-get install -y dotnet-sdk-8.0 aspnetcore-runtime-8.0
+sudo apt-get install -y dotnet-sdk-7.0 aspnetcore-runtime-7.0
+sudo apt-get install -y dotnet-sdk-8.0 aspnetcore-runtime-8.0
 echo "================ DONE! installing dotnet sdk and aspnetcore-runtime 7 & 8 ...======================"
 sleep 2s
 echo "================ installing starship ...======================"
+echo $sudoPW | sudo su -;
 curl -sS https://starship.rs/install.sh | sh
 mkdir -p ${HOME}/.config
 mv ${HOME}/.config/starship.toml ${HOME}/.config/starship.toml.bak
@@ -303,13 +307,15 @@ echo "================ DONE! installing starship ...======================"
 # # RU=$(basename $(eval echo "~$pwd"))
 
 # some housekeeping
+echo $sudoPW | sudo su -;
 rm -rf ${HOME}/downloads/*
 
 # reload your bashrc
+echo $sudoPW | sudo su -;
 eval "$(cat ~/.bashrc | tail -n +10)"
 
 # apt update
-echo $sudoPW | sudo apt-get update -y
+sudo apt-get update -y
 
 # reload your bashrc one last time
 eval "$(cat ~/.bashrc | tail -n +10)"
