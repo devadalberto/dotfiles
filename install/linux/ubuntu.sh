@@ -8,7 +8,7 @@ read -p "Enter Password for sudo: " sudoPW
 OSVER="$(lsb_release -rs)"
 DISTRO="$(lsb_release --id --short)"
 LDISTRO="$(echo ${DISTRO} | tr '[:upper:]' '[:lower:]')"
-
+USRLIB="/usr/lib"
 # apt update
 echo $sudoPW | sudo apt-get update -y
 sleep 2s
@@ -169,11 +169,11 @@ echo "installing for k8s SymVer: ${KSYMVER}"
 echo "installing for k8s MajorVer: ${KVER}"
 
 echo $sudoPW | sudo su -;
-mkdir -p /usr/share/keyrings
-cd ${HOME}/downloads
+sudo mkdir -p /usr/share/keyrings && cd /usr/share/keyrings
 curl -fsSL https://pkgs.k8s.io/core:/stable:/${KVER}/deb/Release.key | sudo gpg --dearmor -o /usr/share/keyrings/kubernetes-apt-keyring.gpg
 # allow unprivileged APT programs to read this keyring
-chmod 644 /usr/share/keyrings/kubernetes-apt-keyring.gpg
+sudo chmod 644 /usr/share/keyrings/kubernetes-apt-keyring.gpg
+echo $sudoPW | sudo su -;
 echo "deb [signed-by=/usr/share/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/${KVER}/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
 echo $sudoPW | sudo su -;
@@ -182,6 +182,7 @@ sudo apt-get install -y terraform kubectl
 
 # Install Kubelogin
 # mkdir -p root/downloads && cd root/downloads
+echo $sudoPW | sudo su -;
 cd ${HOME}/downloads
 KLBASE=https://github.com/Azure/kubelogin/releases/download
 KLVERSION=v0.1.3
@@ -191,8 +192,8 @@ curl -LO ${KUBELOGIN_URL}
 echo $sudoPW | sudo su -;
 sudo unzip ${KLFILE}
 # accept whatever this throws
-sudo rm -rf /usr/local/bin/kubelogin
-mv mv bin/linux_amd64/kubelogin /usr/local/bin/
+sudo rm -f /usr/local/bin/kubelogin
+sudo mv bin/linux_amd64/kubelogin /usr/local/bin/
 sudo chmod +x /usr/local/bin/kubelogin
 
 
@@ -247,11 +248,13 @@ sleep 2s
 # sudo apt install -y ncurses-*
 echo $sudoPW | sudo su -;
 cd ${HOME}/downloads
-curl -LO https://github.com/libevent/libevent/releases/download/release-2.1.12-stable/libevent-2.1.12-stable.tar.gz
-sudo tar -C ${HOME}/downloads -xzf libevent-2.1.12-stable.tar.gz
+curl -fsSL https://github.com/libevent/libevent/releases/download/release-2.1.12-stable/libevent-2.1.12-stable.tar.gz
+echo $sudoPW | sudo su -;
+sudo tar -C ${USRLIB} -xzf libevent-2.1.12-stable.tar.gz
 cd libevent-2.1.12-stable
 ./configure
 make
+echo $sudoPW | sudo su -;
 make verify   # (optional)
 echo $sudoPW | sudo su -;
 sudo make install
@@ -265,18 +268,16 @@ sudo dpkg -i packages-microsoft-prod.deb
 
 echo $sudoPW | sudo su -;
 sudo apt-get update
-echo "================ installing dotnet sdk and aspnetcore-runtime 7 & 8 ...======================"
-sudo apt-get install -y dotnet-sdk-7.0 aspnetcore-runtime-7.0
+echo "================ installing dotnet sdk and aspnetcore-runtime 8 ...======================"
 echo $sudoPW | sudo su -;
 sudo apt-get install -y dotnet-sdk-8.0 aspnetcore-runtime-8.0
-echo "================ DONE! installing dotnet sdk and aspnetcore-runtime 7 & 8 ...======================"
+echo "================ DONE! installing dotnet sdk and aspnetcore-runtime 8 ...======================"
 sleep 2s
 echo "================ installing starship ...======================"
 echo $sudoPW | sudo su -;
-curl -sS https://starship.rs/install.sh | sh
 mkdir -p ${HOME}/.config
+curl -sS https://starship.rs/install.sh | sh
 mv ${HOME}/.config/starship.toml ${HOME}/.config/starship.toml.bak
-# touch ${HOME}/.config/starship.toml
 curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/starship.toml > ${HOME}/.config/starship.toml
 echo "================ DONE! installing starship ...======================"
 
