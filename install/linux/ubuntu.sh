@@ -106,7 +106,7 @@ sudo su -;
 mkdir -p ${HOME}/downloads/neovim && cd ${HOME}/downloads/neovim
 curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
 sudo su -; rm -rf /opt/nvim
-sudo su -; tar -C /opt -xzf nvim-linux64.tar.gz
+sudo su -; sudo tar -C /opt -xzf nvim-linux64.tar.gz
 
 
 # lazyvim
@@ -313,18 +313,18 @@ echo "================ DONE! installing starship ...======================"
 # # RU=$(basename $(eval echo "~$pwd"))
 
 # some housekeeping
-echo $sudoPW | sudo su -;
-rm -rf ${HOME}/downloads/*
+echo $sudoPW | sudo su -; rm -rf ${HOME}/downloads/*;
 
 # reload your bashrc
-echo $sudoPW | sudo su -;
-eval "$(cat ~/.bashrc | tail -n +10)"
+echo $sudoPW | sudo su -; eval "$(cat ~/.bashrc | tail -n +10)";
 
 # apt update
-sudo apt-get update -y
+echo $sudoPW | sudo su -; apt-get update -y;
 
 # reload your bashrc one last time
 eval "$(cat ~/.bashrc | tail -n +10)"
+echo $sudoPW | sudo su -; apt autoremove -y;
+echo $sudoPW | sudo su -; apt autoclean -y;
 echo "========================================================================================================="
 echo "script finished, close all your terminal windows and relaunch your terminal"
 echo "========================================================================================================="
