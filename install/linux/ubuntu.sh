@@ -29,7 +29,7 @@ function install_docker() {
 	elif [[ $REPLY =~ ^[Nn]$ ]]; then
 		echo $sudoPW | sudo su -; do_housekeeping ; exit
 	else
-		echo "Please answer yes or no."
+		echo "Please answer yes or no."; install_docker();
 	fi
 }
 #end region functions
@@ -308,7 +308,7 @@ echo "================ DONE! installing starship ...======================"
 
 
 # docker
-echo $sudoPW | sudo su -; sudo install_docker()
+install_docker()
 
 # uninstall any current install
 for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
