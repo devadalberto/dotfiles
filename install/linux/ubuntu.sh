@@ -301,7 +301,7 @@ while true; do
     case $yn in
         [Yy]* ) break
 		;;
-        [Nn]* ) do_housekeeping ; exit
+        [Nn]* ) echo $sudoPW | sudo su -; do_housekeeping ; exit
 		;;
         * ) echo "Please answer yes or no."
 		;;
@@ -312,26 +312,25 @@ for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker c
 
 #download the installer files
 cd ${HOME}/downloads
-echo $sudoPW | sudo su -;
-sudo install -m 0755 -d ${KRPATH}
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg; echo "$(cat gpg)" | sudo gpg --armor -o ${KRPATH}/docker.asc
-sudo chmod a+r ${KRPATH}/docker.asc
+echo $sudoPW | sudo su -; sudo install -m 0755 -d ${KRPATH}
+echo $sudoPW | sudo su -; sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg; echo "$(cat gpg)" | sudo gpg --armor -o ${KRPATH}/docker.asc
+echo $sudoPW | sudo su -; sudo chmod a+r ${KRPATH}/docker.asc
 
 # Add the repository to Apt sources:
-echo \
+echo $sudoPW | sudo su -; echo \
   "deb [arch=$(dpkg --print-architecture) signed-by=${KRPATH}/docker.asc] https://download.docker.com/linux/ubuntu \
   $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt-get update
+echo $sudoPW | sudo su -; sudo apt-get update
 
 # install docker
 echo $sudoPW | sudo su -; sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
 # create docker group
-sudo groupadd docker
+echo $sudoPW | sudo su -; sudo groupadd docker
 
 # Add your user to the docker group
-sudo usermod -aG docker $USER
+echo $sudoPW | sudo su -; sudo usermod -aG docker $USER
 
 # reload your bashrc
 echo $sudoPW | sudo su -; eval "$(cat ~/.bashrc | tail -n +10)";
@@ -340,7 +339,7 @@ echo $sudoPW | sudo su -; eval "$(cat ~/.bashrc | tail -n +10)";
 echo $sudoPW | sudo su -; apt-get update -y;
 
 # some housekeeping
-do_housekeeping
+echo $sudoPW | sudo su -; do_housekeeping
 
 echo "========================================================================================================="
 echo "script finished, close all your terminal windows and relaunch your terminal"
