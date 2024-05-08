@@ -11,7 +11,7 @@ LDISTRO="$(echo ${DISTRO} | tr '[:upper:]' '[:lower:]')"
 
 # apt update
 echo $sudoPW | sudo apt-get update -y
-sleep 25s
+sleep 2s
 # basic stuff
 echo $sudoPW | sudo apt-get install -y gcc \
 	g++ \
@@ -91,22 +91,22 @@ mkdir -p ${XDG_CONFIG_HOME}/k9s
 git clone https://github.com/alacritty/alacritty-theme ${XDG_CONFIG_HOME}/alacritty/themes
 
 # go (golang)
-echo $sudoPW | sudo su -
+echo $sudoPW | sudo su
 mkdir -p ${HOME}/downloads
 cd ${HOME}/downloads/
 GO_VER='1.22.2'
 GO_INSTALLER=go${GO_VER}.linux-amd64.tar.gz
 GO_FILE_URL=https://go.dev/dl/${GO_INSTALLER}
 curl -sSL ${GO_FILE_URL} > ${GO_INSTALLER}
-tar -zxvf ${GO_INSTALLER} -C /usr/local/
+echo $sudoPW | sudo su; tar -zxvf ${GO_INSTALLER} -C /usr/local/
 
 
 # neovim
-echo $sudoPW | sudo su -
+echo $sudoPW | sudo su -;
 mkdir -p ${HOME}/downloads/neovim && cd ${HOME}/downloads/neovim
 curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
-rm -rf /opt/nvim
-tar -C /opt -xzf nvim-linux64.tar.gz
+echo $sudoPW | sudo su -; rm -rf /opt/nvim
+echo $sudoPW | sudo su -; tar -C /opt -xzf nvim-linux64.tar.gz
 
 
 # lazyvim
@@ -129,7 +129,7 @@ curl -o- https://pyenv.run | bash
 # rm -rf ${HOME}/.oh-my-bash/
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
 
-sleep 3s
+sleep 2s
 # bashrc file
 mv ${HOME}/.bashrc ${HOME}/bashrc.bak
 mv ${HOME}/.bash_profile ${HOME}/.bash_profile.bak
@@ -209,7 +209,7 @@ echo "================ Reloading RC file =================="
 # reload your bashrc
 # echo "source ${HOME}/.bashrc" | bash
 eval "$(cat ~/.bashrc | tail -n +10 )"
-sleep 5s
+sleep 2s
 
 # lazygit - you need to have go(lang) installed
 cd ${HOME}/downloads
@@ -224,11 +224,11 @@ nvm install --lts
 nvm install-latest-npm
 
 echo "================ finished node installer ...======================"
-sleep 3s
+sleep 2s
 
 # install nerdfonts
 getnf -i UbuntuMono
-sleep 3s
+sleep 2s
 
 # pyenv install --list | grep 3.12
 # below install command takes a while, be patient
@@ -236,7 +236,7 @@ echo ":::::::::::::::::::::::::::: below install command takes a while, be patie
 pyenv install 3.12.2
 # set the python version as global
 pyenv global 3.12.2
-sleep 3s
+sleep 2s
 
 # tmux
 # libevent (pre-req)
@@ -262,7 +262,7 @@ echo "================ installing dotnet sdk and aspnetcore-runtime 7 & 8 ...===
 echo $sudoPW | sudo apt-get install -y dotnet-sdk-7.0 aspnetcore-runtime-7.0
 echo $sudoPW | sudo apt-get install -y dotnet-sdk-8.0 aspnetcore-runtime-8.0
 echo "================ DONE! installing dotnet sdk and aspnetcore-runtime 7 & 8 ...======================"
-sleep 3s
+sleep 2s
 echo "================ installing starship ...======================"
 curl -sS https://starship.rs/install.sh | sh
 mkdir -p ${HOME}/.config
