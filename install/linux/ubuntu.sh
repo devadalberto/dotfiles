@@ -1,14 +1,29 @@
 #!/usr/bin/env bash
 { # this ensures the entire script is downloaded #
 ########
-# script variables / constants
+#region variables / constants
 
 read -p "Enter Password for sudo: " sudoPW
 
 OSVER="$(lsb_release -rs)"
 DISTRO="$(lsb_release --id --short)"
 LDISTRO="$(echo ${DISTRO} | tr '[:upper:]' '[:lower:]')"
+DREL="$(lsb_release -cs)"
+# KRPATH="/etc/apt/keyrings"
+KRPATH="/usr/share/keyrings"
 USRLIB="/usr/lib"
+#endregion variables / constants
+
+#region functions
+function do_housekeeping() {
+	echo $sudoPW | sudo su -; rm -rf ${HOME}/downloads/*;
+	echo $sudoPW | sudo su -; apt autoremove -y;
+	echo $sudoPW | sudo su -; apt autoclean -y;
+}
+#end region functions
+
+
+
 # apt update
 echo $sudoPW | sudo apt-get update -y
 sleep 2s
@@ -41,7 +56,7 @@ case $OSVER in
   echo $sudoPW | sudo apt-get install python3.11 python3.11-full python3.11-dev python3.11-venv python3-poetry -y
   ;;
   *)
-  echo "This script is not compatible with: ${LDISTRO} ${OSVER}"
+  echo "This script is not compatible with: ${LDISTRO} ${OSVER}, skipping python install..."; break
   ;;
 esac
 
@@ -138,31 +153,18 @@ curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles
 curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/config/files/alacritty.toml > ${XDG_CONFIG_HOME}/alacritty.toml
 curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/config/files/starship.toml > ${XDG_CONFIG_HOME}/starship.toml
 
-# Symbolic links - 
-# FUTURE: Configure this repo to run after the repo is cloned
-# ln -s ./.amethyst.yml "$HOME"/.amethyst.yml
-# ln -sf "$PWD/alacritty.toml" "$XDG_CONFIG_HOME"/alacritty/alacritty.toml
-# ln -sf "$PWD/k9s/skin.yml" "$XDG_CONFIG_HOME"/k9s/skin.yml
-# ln -sf "$PWD/.bash_profile" "$HOME"/.bash_profile
-# ln -sf "$PWD/.bashrc" "$HOME"/.bashrc
-# ln -sf "$PWD/.inputrc" "$HOME"/.inputrc
-# ln -sf "$PWD/.tmux.conf" "$HOME"/.tmux.conf
-# ln -sf "$PWD/nvim" "$XDG_CONFIG_HOME"/nvim
-# ln -sf "$PWD/skhdrc" "$XDG_CONFIG_HOME"/skhd/skhdrc
 
 # hashicorp / tf
 echo $sudoPW | sudo su -;
 cd ${HOME}/downloads/
 curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
 sudo gpg --no-default-keyring --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg --fingerprint
-
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
 
-############################################################
-# Kubernetes - k8s
 
-KSYMVER=$(curl -L -s https://dl.k8s.io/release/stable.txt) # v1.30.0
-KVER=$(echo ${KSYMVER} | cut -f1-2 -d\.)  # v1.30 -> for curl/web downloads
+# Kubernetes - k8s
+KSYMVER=$(curl -L -s https://dl.k8s.io/release/stable.txt)
+KVER=$(echo ${KSYMVER} | cut -f1-2 -d\.)
 echo "installing for k8s SymVer: ${KSYMVER}"
 echo "installing for k8s MajorVer: ${KVER}"
 
@@ -174,12 +176,11 @@ sudo chmod 644 /usr/share/keyrings/kubernetes-apt-keyring.gpg
 echo $sudoPW | sudo su -;
 echo "deb [signed-by=/usr/share/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/${KVER}/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
-
 echo $sudoPW | sudo su -; sudo apt-get update -y;
 
 case $OSVER in
   24.04)
-  echo $sudoPW | sudo su -; cd ${HOME}/downloads; curl -LO "https://dl.k8s.io/release/${KSYMVER}/bin/linux/amd64/kubectl"; sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+  echo $sudoPW | sudo su -; sudo apt-get install -y terraform; cd ${HOME}/downloads; curl -LO "https://dl.k8s.io/release/${KSYMVER}/bin/linux/amd64/kubectl"; sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
   ;;
   22.04)
   echo $sudoPW | sudo su -; sudo apt-get install -y terraform kubectl
@@ -187,6 +188,7 @@ case $OSVER in
   *)
   echo "This script is not compatible with: ${LDISTRO} - ${OSVER}"
   echo "Make sure to check ksite to install on your System"
+  echo "skipping k8s and terraform installs..."; break
   ;;
 esac
 
@@ -292,39 +294,44 @@ mv ${HOME}/.config/starship.toml ${HOME}/.config/starship.toml.bak
 curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/starship.toml > ${HOME}/.config/starship.toml
 echo "================ DONE! installing starship ...======================"
 
-# # Not tested yet
-# # docker
-# # uninstall any current install
-# for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
 
-# sudo install -m 0755 -d /etc/apt/keyrings
+# docker
+while true; do
+    read -p "Do you wish to install docker desktop? " yn
+    case $yn in
+        [Yy]* ) break
+		;;
+        [Nn]* ) do_housekeeping ; exit
+		;;
+        * ) echo "Please answer yes or no."
+		;;
+    esac
+done
+# uninstall any current install
+for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
 
-# #download the installer files
-# mkdir -p ${HOME}/downloads
-# curl -fsSL https://download.docker.com/linux/ubuntu/gpg > ${HOME}/downloads/docker.asc
-# sudo cp ${HOME}/downloads/docker.asc /etc/apt/keyrings/docker.asc 
-# sudo chmod a+r /etc/apt/keyrings/docker.asc
+#download the installer files
+cd ${HOME}/downloads
+echo $sudoPW | sudo su -;
+sudo install -m 0755 -d ${KRPATH}
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg; echo "$(cat gpg)" | sudo gpg --armor -o ${KRPATH}/docker.asc
+sudo chmod a+r ${KRPATH}/docker.asc
 
-# # Add the repository to Apt sources:
-# echo \
-#   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-#   $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-#   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-# sudo apt-get update
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=${KRPATH}/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
 
-# # install docker
-# sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+# install docker
+echo $sudoPW | sudo su -; sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-# # create docker group
-# sudo groupadd docker
+# create docker group
+sudo groupadd docker
 
-# # Add your user to the docker group
-# sudo usermod -aG docker $USER
-
-# # RU=$(basename $(eval echo "~$pwd"))
-
-# some housekeeping
-echo $sudoPW | sudo su -; rm -rf ${HOME}/downloads/*;
+# Add your user to the docker group
+sudo usermod -aG docker $USER
 
 # reload your bashrc
 echo $sudoPW | sudo su -; eval "$(cat ~/.bashrc | tail -n +10)";
@@ -332,11 +339,16 @@ echo $sudoPW | sudo su -; eval "$(cat ~/.bashrc | tail -n +10)";
 # apt update
 echo $sudoPW | sudo su -; apt-get update -y;
 
-# reload your bashrc one last time
-eval "$(cat ~/.bashrc | tail -n +10)"
-echo $sudoPW | sudo su -; apt autoremove -y;
-echo $sudoPW | sudo su -; apt autoclean -y;
+# some housekeeping
+do_housekeeping
+
 echo "========================================================================================================="
 echo "script finished, close all your terminal windows and relaunch your terminal"
+echo ""
+echo "if you want to get rid of the temporal files in case the cleanup didn't work run:"
+echo ""
+echo "sudo apt autoremove -y; sudo apt autoclean -y; rm -rf ${HOME}/downloads/*"
+echo ""
+echo "Cheers!"
 echo "========================================================================================================="
 } # this ensures the entire script is downloaded #
