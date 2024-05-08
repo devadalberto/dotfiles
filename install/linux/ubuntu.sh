@@ -20,18 +20,18 @@ function do_housekeeping() {
 	echo $sudoPW | sudo su -; apt autoclean -y;
 }
 
-function install_podman() {
+# function install_podman() {
 
-	read -p "Do you wish to install podman? (Y/n)" -n 1 -r
-	echo
-	if [[ $REPLY =~ ^[Yy]$ ]]; then
-		echo $sudoPW | sudo su -; sudo apt install podman podman-compose podman-docker podman-remote podman-toolbox python3-podman
-	elif [[ $REPLY =~ ^[Nn]$ ]]; then
-		echo $sudoPW | sudo su -; do_housekeeping ; exit
-	else
-		exit
-	fi
-}
+# 	read -p "Do you wish to install podman? (Y/n)" -n 1 -r
+# 	echo
+# 	if [[ $REPLY =~ ^[Yy]$ ]]; then
+# 		echo $sudoPW | sudo su -; sudo apt install -y podman podman-compose podman-docker podman-remote podman-toolbox python3-podman
+# 	elif [[ $REPLY =~ ^[Nn]$ ]]; then
+# 		echo $sudoPW | sudo su -; do_housekeeping ; exit
+# 	else
+# 		exit
+# 	fi
+# }
 #end region functions
 
 # apt update
@@ -295,8 +295,8 @@ echo "================ DONE! installing starship ...======================"
 # uninstall any docker traces
 echo $sudoPW | sudo su -; for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
 
-# docker
-install_podman
+# podman
+echo $sudoPW | sudo su -; sudo apt-get install -y podman podman-compose podman-docker podman-remote podman-toolbox python3-podman
 
 # reload your bashrc
 eval "$(cat ~/.bashrc | tail -n +10)";
