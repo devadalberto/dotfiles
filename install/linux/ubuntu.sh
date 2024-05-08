@@ -20,12 +20,12 @@ function do_housekeeping() {
 	echo $sudoPW | sudo su -; apt autoclean -y;
 }
 
-function install_docker() {
+function install_podman() {
 
-	read -p "Do you wish to install docker? (Y/n)" -n 1 -r
+	read -p "Do you wish to install podman? (Y/n)" -n 1 -r
 	echo
 	if [[ $REPLY =~ ^[Yy]$ ]]; then
-		break
+		echo $sudoPW | sudo su -; sudo apt install podman podman-compose podman-docker podman-remote podman-toolbox python3-podman
 	elif [[ $REPLY =~ ^[Nn]$ ]]; then
 		echo $sudoPW | sudo su -; do_housekeeping ; exit
 	else
@@ -292,33 +292,11 @@ mv ${HOME}/.config/starship.toml ${HOME}/.config/starship.toml.bak
 curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/starship.toml > ${HOME}/.config/starship.toml
 echo "================ DONE! installing starship ...======================"
 
+# uninstall any docker traces
+echo $sudoPW | sudo su -; for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
+
 # docker
-install_docker()
-
-# uninstall any current install
-for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
-
-#download the installer files
-echo $sudoPW | sudo su -; sudo install -m 0755 -d ${KRPATH}
-cd ${HOME}/downloads && curl -fsSL https://download.docker.com/linux/ubuntu/gpg
-echo "$(cat gpg)" | sudo gpg --armor -o ${KRPATH}/docker.asc
-echo $sudoPW | sudo su -; sudo chmod a+r ${KRPATH}/docker.asc
-
-# Add the repository to Apt sources:
-echo $sudoPW | sudo su -; echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=${KRPATH}/docker.asc] https://download.docker.com/linux/ubuntu \
-  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-echo $sudoPW | sudo su -; sudo apt-get update
-
-# install docker
-echo $sudoPW | sudo su -; sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-
-# create docker group
-echo $sudoPW | sudo su -; sudo groupadd docker
-
-# Add your user to the docker group
-echo $sudoPW | sudo su -; sudo usermod -aG docker $USER
+install_podman()
 
 # reload your bashrc
 echo $sudoPW | sudo su -; eval "$(cat ~/.bashrc | tail -n +10)";
