@@ -155,12 +155,12 @@ curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/config/f
 # hashicorp / tf
 echo $sudoPW | sudo su -;
 cd ${HOME}/downloads/
-curl -fsSL https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
-gpg --no-default-keyring --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg --fingerprint
+curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+sudo gpg --no-default-keyring --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg --fingerprint
 
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | echo $sudoPW | tee /etc/apt/sources.list.d/hashicorp.list
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
 
-####################################################333
+############################################################
 # Kubernetes - k8s
 
 KSYMVER=$(curl -L -s https://dl.k8s.io/release/stable.txt) # v1.30.0
@@ -168,16 +168,17 @@ KVER=$(echo ${KSYMVER} | cut -f1-2 -d\.)  # v1.30 -> for curl/web downloads
 echo "installing for k8s SymVer: ${KSYMVER}"
 echo "installing for k8s MajorVer: ${KVER}"
 
+echo $sudoPW | sudo su -;
 mkdir -p /usr/share/keyrings
-
 cd ${HOME}/downloads
-curl -fsSL https://pkgs.k8s.io/core:/stable:/${KVER}/deb/Release.key | gpg --dearmor -o /usr/share/keyrings/kubernetes-apt-keyring.gpg
+curl -fsSL https://pkgs.k8s.io/core:/stable:/${KVER}/deb/Release.key | sudo gpg --dearmor -o /usr/share/keyrings/kubernetes-apt-keyring.gpg
 # allow unprivileged APT programs to read this keyring
 chmod 644 /usr/share/keyrings/kubernetes-apt-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/${KVER}/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
-apt-get update -y
-apt-get install -y terraform kubectl
+echo $sudoPW | sudo su -;
+sudo apt-get update -y
+sudo apt-get install -y terraform kubectl
 
 # Install Kubelogin
 # mkdir -p root/downloads && cd root/downloads
@@ -187,17 +188,19 @@ KLVERSION=v0.1.3
 KLFILE=kubelogin-linux-amd64.zip
 KUBELOGIN_URL=${KLBASE}/${KLVERSION}/${KLFILE}
 curl -LO ${KUBELOGIN_URL}
-unzip ${KLFILE}
+echo $sudoPW | sudo su -;
+sudo unzip ${KLFILE}
 # accept whatever this throws
-rm -rf /usr/local/bin/kubelogin
-mv bin/linux_amd64/kubelogin /usr/local/bin/
-chmod +x /usr/local/bin/kubelogin
-exit
+sudo rm -rf /usr/local/bin/kubelogin
+mv mv bin/linux_amd64/kubelogin /usr/local/bin/
+sudo chmod +x /usr/local/bin/kubelogin
+
 
 # download and install tmux
 mkdir -p ${HOME}/downloads/tmux && cd ${HOME}/downloads/tmux
 git clone https://github.com/tmux/tmux.git
 cd tmux
+echo $sudoPW | sudo su -;
 sh autogen.sh
 ./configure && make
 sudo make install
@@ -250,6 +253,7 @@ cd libevent-2.1.12-stable
 ./configure
 make
 make verify   # (optional)
+echo $sudoPW | sudo su -;
 sudo make install
 
 ## dotnet installation
@@ -263,6 +267,7 @@ echo $sudoPW | sudo su -;
 sudo apt-get update
 echo "================ installing dotnet sdk and aspnetcore-runtime 7 & 8 ...======================"
 sudo apt-get install -y dotnet-sdk-7.0 aspnetcore-runtime-7.0
+echo $sudoPW | sudo su -;
 sudo apt-get install -y dotnet-sdk-8.0 aspnetcore-runtime-8.0
 echo "================ DONE! installing dotnet sdk and aspnetcore-runtime 7 & 8 ...======================"
 sleep 2s
@@ -271,7 +276,7 @@ echo $sudoPW | sudo su -;
 curl -sS https://starship.rs/install.sh | sh
 mkdir -p ${HOME}/.config
 mv ${HOME}/.config/starship.toml ${HOME}/.config/starship.toml.bak
-touch ${HOME}/.config/starship.toml
+# touch ${HOME}/.config/starship.toml
 curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/starship.toml > ${HOME}/.config/starship.toml
 echo "================ DONE! installing starship ...======================"
 
