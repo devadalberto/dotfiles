@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 { # this ensures the entire script is downloaded #
 ########
-#region variables / constants
-
 read -p "Enter Password for sudo: " sudoPW
 
+#region variables / constants
 OSVER="$(lsb_release -rs)"
 DISTRO="$(lsb_release --id --short)"
 LDISTRO="$(echo ${DISTRO} | tr '[:upper:]' '[:lower:]')"
@@ -34,11 +33,9 @@ function install_docker() {
 }
 #end region functions
 
-
-
 # apt update
 echo $sudoPW | sudo apt-get update -y
-sleep 2s
+
 # basic stuff
 echo $sudoPW | sudo apt-get install -y gcc \
 	g++ \
@@ -110,8 +107,6 @@ mkdir -p ${XDG_CONFIG_HOME}/bash
 mkdir -p ${XDG_CONFIG_HOME}/alacritty
 mkdir -p ${XDG_CONFIG_HOME}/alacritty/themes
 mkdir -p ${XDG_CONFIG_HOME}/k9s
-# mkdir -p "$XDG_CONFIG_HOME"/skhd
-# mkdir -p "$XDG_CONFIG_HOME"/wezterm
 
 git clone https://github.com/alacritty/alacritty-theme ${XDG_CONFIG_HOME}/alacritty/themes
 
@@ -125,14 +120,12 @@ GO_FILE_URL=https://go.dev/dl/${GO_INSTALLER}
 curl -sSL ${GO_FILE_URL} > ${GO_INSTALLER}
 sudo tar -zxvf ${GO_INSTALLER} -C /usr/local/
 
-
 # neovim
 sudo su -;
 mkdir -p ${HOME}/downloads/neovim && cd ${HOME}/downloads/neovim
 curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
 sudo su -; rm -rf /opt/nvim
 sudo su -; sudo tar -C /opt -xzf nvim-linux64.tar.gz
-
 
 # lazyvim
 mv ${XDG_CONFIG_HOME}/nvim ${XDG_CONFIG_HOME}/nvim.bak
@@ -151,7 +144,6 @@ rm -rf ${XDG_CONFIG_HOME}/nvim/.git
 curl -o- https://pyenv.run | bash
 
 # oh my bash
-# rm -rf ${HOME}/.oh-my-bash/
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
 
 sleep 2s
@@ -165,14 +157,12 @@ curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles
 curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/config/files/alacritty.toml > ${XDG_CONFIG_HOME}/alacritty.toml
 curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/config/files/starship.toml > ${XDG_CONFIG_HOME}/starship.toml
 
-
 # hashicorp / tf
 echo $sudoPW | sudo su -;
 cd ${HOME}/downloads/
 curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
 sudo gpg --no-default-keyring --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg --fingerprint
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
-
 
 # Kubernetes - k8s
 KSYMVER=$(curl -L -s https://dl.k8s.io/release/stable.txt)
@@ -204,7 +194,6 @@ case $OSVER in
   ;;
 esac
 
-
 # Install Kubelogin
 # mkdir -p root/downloads && cd root/downloads
 echo $sudoPW | sudo su -;
@@ -221,7 +210,6 @@ sudo rm -f /usr/local/bin/kubelogin
 sudo mv bin/linux_amd64/kubelogin /usr/local/bin/
 sudo chmod +x /usr/local/bin/kubelogin
 
-
 # download and install tmux
 mkdir -p ${HOME}/downloads/tmux && cd ${HOME}/downloads/tmux
 git clone https://github.com/tmux/tmux.git
@@ -232,45 +220,42 @@ sh autogen.sh
 sudo make install
 clear
 
-
-echo "================ Reloading RC file =================="
-
 # reload your bashrc
-# echo "source ${HOME}/.bashrc" | bash
-eval "$(cat ~/.bashrc | tail -n +10 )"
+echo "================ Reloading RC file =================="
 sleep 2s
+eval "$(cat ~/.bashrc | tail -n +10 )"
+
 
 # lazygit - you need to have go(lang) installed
+echo "================ Installing lazygit =================="
+sleep 2s
 cd ${HOME}/downloads
 git clone https://github.com/jesseduffield/lazygit.git
 cd lazygit
 go install
 
 # install Node
-clear
 echo "================ installing node with NVM ...======================"
+sleep 2s
 nvm install --lts
 nvm install-latest-npm
 
-echo "================ finished node installer ...======================"
-sleep 2s
 
 # install nerdfonts
-getnf -i UbuntuMono
+echo "================ Installing UbuntuMono NerdFont ...======================"
 sleep 2s
+getnf -i UbuntuMono
 
-# pyenv install --list | grep 3.12
-# below install command takes a while, be patient
+echo "================ Installing pyenv Python  ...======================"
 echo ":::::::::::::::::::::::::::: below install command takes a while, be patient ::::::::::::::::::::::::::::"
+sleep 2s
 pyenv install 3.12.2
 # set the python version as global
 pyenv global 3.12.2
-sleep 2s
 
-# tmux
-# libevent (pre-req)
-# sudo apt-get install -y autoconf automake pkg-config bash-completion bison
-# sudo apt install -y ncurses-*
+# tmux pre-req
+echo "================ Installing tmux pre-req: libevent-2.1.12  ...======================"
+sleep 2s
 echo $sudoPW | sudo su -;
 cd ${HOME}/downloads
 curl -fsSL https://github.com/libevent/libevent/releases/download/release-2.1.12-stable/libevent-2.1.12-stable.tar.gz
@@ -285,27 +270,26 @@ echo $sudoPW | sudo su -;
 sudo make install
 
 ## dotnet installation
+echo "================ installing dotnet sdk and aspnetcore-runtime 8 ...======================"
+sleep 2s
 echo $sudoPW | sudo su -;
 cd ${HOME}/downloads
 curl -LO https://packages.microsoft.com/config/${LDISTRO}/${OSVER}/packages-microsoft-prod.deb
 sudo dpkg -i packages-microsoft-prod.deb
-# rm packages-microsoft-prod.deb
 
-echo $sudoPW | sudo su -;
-sudo apt-get update
-echo "================ installing dotnet sdk and aspnetcore-runtime 8 ...======================"
-echo $sudoPW | sudo su -;
-sudo apt-get install -y dotnet-sdk-8.0 aspnetcore-runtime-8.0
+echo $sudoPW | sudo su -; sudo apt-get update
+
+echo $sudoPW | sudo su -; sudo apt-get install -y dotnet-sdk-8.0 aspnetcore-runtime-8.0
 echo "================ DONE! installing dotnet sdk and aspnetcore-runtime 8 ...======================"
-sleep 2s
+echo
+
 echo "================ installing starship ...======================"
-echo $sudoPW | sudo su -;
+sleep 2s
 mkdir -p ${HOME}/.config
 curl -sS https://starship.rs/install.sh | sh -s -- -y
 mv ${HOME}/.config/starship.toml ${HOME}/.config/starship.toml.bak
 curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/starship.toml > ${HOME}/.config/starship.toml
 echo "================ DONE! installing starship ...======================"
-
 
 # docker
 install_docker()
