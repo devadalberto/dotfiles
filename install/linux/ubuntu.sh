@@ -296,16 +296,16 @@ echo "================ DONE! installing starship ...======================"
 echo $sudoPW | sudo su -; for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
 
 # docker
-install_podman()
+install_podman
 
 # reload your bashrc
-echo $sudoPW | sudo su -; eval "$(cat ~/.bashrc | tail -n +10)";
+eval "$(cat ~/.bashrc | tail -n +10)";
 
 # apt update
-echo $sudoPW | sudo su -; apt-get update -y;
+echo $sudoPW | sudo su -; sudo apt-get update -y;
 
 # some housekeeping
-echo $sudoPW | sudo su -; do_housekeeping
+do_housekeeping
 
 echo "========================================================================================================="
 echo "script finished, close all your terminal windows and relaunch your terminal"
