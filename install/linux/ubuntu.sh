@@ -264,8 +264,6 @@ cd ${USRLIB}/libevent-2.1.12-stable
 ./configure
 make
 echo $sudoPW | sudo su -;
-make verify   # (optional)
-echo $sudoPW | sudo su -;
 sudo make install
 
 ## dotnet installation
@@ -290,14 +288,6 @@ mv ${HOME}/.config/starship.toml ${HOME}/.config/starship.toml.bak
 curl -fsSL https://raw.githubusercontent.com/devadalberto/dotfiles/main/dotfiles/starship.toml > ${HOME}/.config/starship.toml
 echo "================ DONE! installing starship ...======================"
 
-# uninstall any docker traces
-echo $sudoPW | sudo su -; for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
-
-# podman
-echo "================ installing podman ======================"
-echo $sudoPW | sudo su -; sudo apt-get install -y podman podman-compose podman-docker podman-remote podman-toolbox python3-podman
-echo "================ DONE! installing podman ...======================"
-
 # reload your bashrc
 eval "$(cat ~/.bashrc | tail -n +10)";
 
@@ -314,6 +304,8 @@ echo "if you want to get rid of the temporal files in case the cleanup didn't wo
 echo ""
 echo "sudo apt autoremove -y; sudo apt autoclean -y; sudo chown -R $USER $HOME/downloads; rm -rf ${HOME}/downloads/*"
 echo ""
-echo "Cheers!"
+echo "+++++++++++++++++++++++++++++++++++++"
+echo "ubuntu 'basics'"
+echo "+++++++++++++++++++++++++++++++++++++"
 echo "========================================================================================================="
 } # this ensures the entire script is downloaded #
