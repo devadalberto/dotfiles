@@ -18,15 +18,13 @@ clear
 
 # tmux pre-req
 echo "================ Installing tmux pre-req: libevent-2.1.12  ...======================"
+mkdir -p ${HOME}/downloads && cd ${HOME}/downloads
 sleep 2s
-echo $sudoPW | sudo su -;
-cd ${HOME}/downloads
 curl -LO https://github.com/libevent/libevent/releases/download/release-2.1.12-stable/libevent-2.1.12-stable.tar.gz
-echo $sudoPW | sudo su -;
-sudo tar -C ${USRLIB} -xzf libevent-2.1.12-stable.tar.gz
+echo $sudoPW | sudo su -; sudo tar -C ${USRLIB} -xzf libevent-2.1.12-stable.tar.gz
 cd ${USRLIB}/libevent-2.1.12-stable
 ./configure && make
-sudo make install
+echo $sudoPW | sudo su -; sudo make install
 
 # download and install tmux
 mkdir -p ${HOME}/downloads/tmux && cd ${HOME}/downloads/tmux
@@ -35,13 +33,13 @@ cd tmux
 echo $sudoPW | sudo su -;
 sh autogen.sh
 ./configure && make
-sudo make install
+echo $sudoPW | sudo su -; sudo make install
 
 # reload your bashrc
-eval "$(cat ~/.bashrc | tail -n +10)";
+eval "$(cat ~/.bashrc | tail -n +10)"
 
 # apt update
-echo $sudoPW | sudo su -; sudo apt-get update -y;
+echo $sudoPW | sudo su -; sudo apt-get update -y
 
 # some housekeeping
 do_housekeeping
