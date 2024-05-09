@@ -21,7 +21,7 @@ echo $sudoPW | sudo su -; for pkg in docker.io docker-doc docker-compose docker-
 
 # podman
 echo "================ installing podman ======================"
-echo $sudoPW | sudo su -; sudo apt-get install -y podman podman-compose podman-docker podman-remote podman-toolbox python3-podman
+echo $sudoPW | sudo su -; sudo apt-get install -y podman podman-docker podman-toolbox
 echo "================ DONE! installing podman ...======================"
 
 # reload your bashrc
@@ -31,10 +31,10 @@ eval "$(cat ~/.bashrc | tail -n +10)"
 echo $sudoPW | sudo su -; sudo apt-get update -y
 
 # reload your bashrc
-eval "$(cat ~/.bashrc | tail -n +10)";
+eval "$(cat ~/.bashrc | tail -n +10)"
 
 # apt update
-echo $sudoPW | sudo su -; sudo apt-get update -y;
+echo $sudoPW | sudo su -; sudo apt-get update -y
 
 # some housekeeping
 do_housekeeping
