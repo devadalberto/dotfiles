@@ -257,10 +257,10 @@ echo "================ Installing tmux pre-req: libevent-2.1.12  ...============
 sleep 2s
 echo $sudoPW | sudo su -;
 cd ${HOME}/downloads
-curl -fsSL https://github.com/libevent/libevent/releases/download/release-2.1.12-stable/libevent-2.1.12-stable.tar.gz
+curl -LO https://github.com/libevent/libevent/releases/download/release-2.1.12-stable/libevent-2.1.12-stable.tar.gz
 echo $sudoPW | sudo su -;
 sudo tar -C ${USRLIB} -xzf libevent-2.1.12-stable.tar.gz
-cd libevent-2.1.12-stable
+cd ${USRLIB}/libevent-2.1.12-stable
 ./configure
 make
 echo $sudoPW | sudo su -;
