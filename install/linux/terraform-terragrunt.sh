@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# proudly borrowed from:
+# https://gist.github.com/nemani/19ce4f04f26ea67e05d4608540b98595
 function terraform-install() {
   [[ -f ${HOME}/bin/terraform ]] && echo "`${HOME}/bin/terraform version` already installed at ${HOME}/bin/terraform" && return 0
 
