@@ -86,7 +86,6 @@ echo $sudoPW | sudo apt install -y build-essential \
 	liblzma-dev \
 	dnsutils \
 	neofetch \
-	rust-all \
 	unzip \
 	ncurses-* \
 	ripgrep \
