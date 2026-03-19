@@ -3,7 +3,10 @@
     "allow": [
       "Bash(chmod +x bin/.local/bin/new-project.sh bin/.local/bin/new-research.sh bin/.local/bin/bootstrap-plugins.sh)",
       "Bash(chmod +x \"/home/jose/repos/github/dotfiles-new/bin/.local/bin/new-project.sh\" \"/home/jose/repos/github/dotfiles-new/bin/.local/bin/new-research.sh\" \"/home/jose/repos/github/dotfiles-new/bin/.local/bin/bootstrap-plugins.sh\")",
-      "Bash(chmod +x \"//wsl.localhost/Ubuntu/home/jose/repos/github/dotfiles-new/bin/.local/bin/new-project.sh\" \"//wsl.localhost/Ubuntu/home/jose/repos/github/dotfiles-new/bin/.local/bin/new-research.sh\" \"//wsl.localhost/Ubuntu/home/jose/repos/github/dotfiles-new/bin/.local/bin/bootstrap-plugins.sh\")"
+      "Bash(chmod +x \"//wsl.localhost/Ubuntu/home/jose/repos/github/dotfiles-new/bin/.local/bin/new-project.sh\" \"//wsl.localhost/Ubuntu/home/jose/repos/github/dotfiles-new/bin/.local/bin/new-research.sh\" \"//wsl.localhost/Ubuntu/home/jose/repos/github/dotfiles-new/bin/.local/bin/bootstrap-plugins.sh\")",
+      "Bash(wsl -e bash -c \"cd /home/jose/repos/github/dotfiles-new && git status --short\")",
+      "Bash(wsl -e bash -c \"cd /home/jose/repos/github/dotfiles-new && git commit -m ''feat: add scripts and Makefile''\")",
+      "Bash(wsl -e bash -c \"cd /home/jose/repos/github/dotfiles-new && git push origin feature/claude-tooling\")"
     ]
   }
 }
