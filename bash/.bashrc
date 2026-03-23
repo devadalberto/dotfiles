@@ -1,0 +1,236 @@
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+# Enable the subsequent settings only in interactive sessions
+case $- in
+*i*) ;;
+*) return ;;
+esac
+
+# proxy config
+# PROXY_URL="http://1.2.3.4:4321/"
+# export http_proxy="$PROXY_URL"
+# export https_proxy="$PROXY_URL"
+# export ftp_proxy="$PROXY_URL"
+# export no_proxy="127.0.0.1,localhost,192.168.1.1,:1"
+# #
+# export HTTP_PROXY="$PROXY_URL"
+# export HTTPS_PROXY="$PROXY_URL"
+# export FTP_PROXY="$PROXY_URL"
+# export NO_PROXY="127.0.0.1,localhost,192.168.1.1,:1"
+
+# oh-my-bash Path and config.
+export OSH="${HOME}/.oh-my-bash"
+
+OSH_THEME="font"
+
+OMB_USE_SUDO=true
+
+# Add wisely, as too many completions slow down shell startup.
+completions=(
+        git
+        composer
+        ssh
+)
+
+# Which aliases would you like to load? (aliases can be found in ~/.oh-my-bash/aliases/*)
+# Custom aliases may be added to ~/.oh-my-bash/custom/aliases/
+# Example format: aliases=(vagrant composer git-avh)
+# Add wisely, as too many aliases slow down shell startup.
+aliases=(
+        general
+)
+
+# Which plugins would you like to load? (plugins can be found in ~/.oh-my-bash/plugins/*)
+# Custom plugins may be added to ~/.oh-my-bash/custom/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+plugins=(
+        ansible
+        bashmarks
+        git
+        kubectl
+        npm
+        nvm
+        pyenv
+)
+
+# Which plugins would you like to conditionally load? (plugins can be found in ~/.oh-my-bash/plugins/*)
+# Custom plugins may be added to ~/.oh-my-bash/custom/plugins/
+# Example format:
+ if [ "$DISPLAY" ] || [ "$SSH" ]; then
+     plugins+=(tmux-autoattach)
+ fi
+
+source "$OSH"/oh-my-bash.sh
+# ----
+
+# Set to superior editing mode
+set -o vi
+
+# keybinds
+bind -x '"\C-l":clear'
+
+# ==================== Environment Variables ====================
+
+export VISUAL=nvim
+export EDITOR=nvim
+
+# config
+# export BROWSER="firefox"
+
+# directories
+export REPOS="$HOME/repos"
+export GITUSER="devadalberto"
+export GHREPOS="$REPOS/github.com/$GITUSER"
+export DOTFILES="$GHREPOS/dotfiles"
+export SCRIPTS="$DOTFILES/scripts"
+# export SECOND_BRAIN="$HOME/garden"
+# export LAB="$GHREPOS/lab"
+# export ICLOUD="$HOME/icloud"
+
+
+# dotnet
+export DOTNET_ROOT="$HOME/dotnet"
+
+# get rid of mail notifications on MacOS
+unset MAILCHECK
+unset SSH_ASKPASS
+
+
+# ==================== History ====================
+export HISTFILE=~/.histfile
+export HISTSIZE=25000
+export SAVEHIST=25000
+export HISTCONTROL=ignorespace
+
+# aliases
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    #alias dir='dir --color=auto'
+    #alias vdir='vdir --color=auto'
+
+fi
+
+# ls
+alias ls='ls --color=auto'
+alias ll='ls -la'
+# alias la='exa -laghm@ --all --icons --git --color=always'
+alias la='ls -lathr'
+alias getupdate='sudo apt-get update -y && sudo apt-get upgrade -y'
+# alias cat='bat -p --wrap=never --paging=never'
+# alias batt='bat -p --paging=never'
+alias getip="grep -m 1 nameserver /etc/resolv.conf | awk '{print $2}'"
+alias cfc="xclip -sel c < $1"
+alias cdaziac="cd /home/${USER}/dev/repos/terraform-az-iac"
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# Docker PS Prettify Function
+function dock() {
+  if [[ "$@" == "ps" ]]; then
+    command docker ps --format 'table {{.Names}}\t{{.Status}} : {{.RunningFor}}\t{{.ID}}\t{{.Image}}'
+  elif [[ "$@" == "psa" ]]; then
+    # docker ps -a includes all containers
+    command docker ps -a --format 'table {{.Names}}\t{{.Status}}\t{{.Size}}\n{{.ID}}\t{{.Image}}{{if .Ports}}{{with $p := split .Ports ", "}}\t{{len $p}} port(s) on {{end}}{{- .Networks}}{{else}}\tNo Ports on {{ .Networks }}{{end}}\n'
+  elif [[ "$@" == "psnet" ]]; then
+    # docker ps with network information
+    command docker ps -a --format 'table {{.Names}}\t{{.Status}}\t{{.Networks}}\n{{.ID}}{{if .Ports}}{{with $p := split .Ports ", "}}{{range $p}}\t\t{{println .}}{{end}}{{end}}{{else}}\t\t{{println "No Ports"}}{{end}}'
+  else
+    command docker "$@"
+  fi
+}
+
+# finds all files recursively and sorts by last modification, ignore hidden files
+alias lastmod='find . -type f -not -path "*/\.*" -exec ls -lrt {} +'
+
+# Azure
+alias sub='az account set -s'
+
+# dotnet
+alias dr='dotnet run'
+
+# bash parameter completion for the dotnet CLI
+function _dotnet_bash_complete() {
+	local cur="${COMP_WORDS[COMP_CWORD]}" IFS=$'\n' # On Windows you may need to use use IFS=$'\r\n'
+	local candidates
+
+	read -d '' -ra candidates < <(dotnet complete --position "${COMP_POINT}" "${COMP_LINE}" 2>/dev/null)
+
+	read -d '' -ra COMPREPLY < <(compgen -W "${candidates[*]:-}" -- "$cur")
+}
+
+complete -f -F _dotnet_bash_complete dotnet
+
+# git
+alias gp='git pull'
+alias gs='git status'
+alias lg='lazygit'
+
+# kubectl
+alias k='kubectl'
+source <(kubectl completion bash)
+complete -o default -F __start_kubectl k
+alias kgp='kubectl get pods'
+alias kc='kubectx'
+alias kn='kubens'
+
+# fzf aliases
+# use fp to do a fzf search and preview the files
+alias fp="fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'"
+# search for a file with fzf and open it in vim
+alias vf='v $(fp)'
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+# NVM
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# golang
+export GOROOT=/usr/local/go
+export GOPATH=$HOME/go
+export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+
+# pyenv
+# Load pyenv automatically
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
+# get-nerd-fonts path
+export PATH="$PATH:~/.local/bin"
+
+# neovim path
+export PATH="$PATH:/opt/nvim-linux64/bin"
+export PATH="$PATH:~/.local/bin"
+
+# tmux & libevent path
+export PATH=$HOME/local/bin:$PATH
+export LD_LIBRARY_PATH=$HOME/local/lib:$LD_LIBRARY_PATH
+export MANPATH=$HOME/local/share/man:$MANPATH
+
+# Poetry path
+export PATH="${HOME}/.local/bin:$PATH"
+
+# kubectl
+# this way I use the same file for WSL and for windows
+#######################################################
+############ REMEMBER TO UPDATE THIS PATH ############
+#######################################################
+
+# export KUBECONFIG="/mnt/c/Users/${USER}/.kube/config"
+
+# kubelogin
+export KL_ROOT=/usr/local/bin/kubelogin
+export KL_PATH=$HOME/kubelogin
+export PATH=$KL_PATH/bin:$KL_ROOT/bin:$PATH
+
+# starship
+eval "$(starship init bash)"
